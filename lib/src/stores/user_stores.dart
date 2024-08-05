@@ -115,4 +115,6 @@ class UserStore {
 
     return null;
   }
+
+  register(UserModel register) {}
 }

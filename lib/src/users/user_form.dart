@@ -48,7 +48,7 @@ class _UserFormState extends State<UserForm> {
     final user = await store.getUserById(widget.id!);
     setState(() {
       emailController.text = user?.email ?? "";
-      nameController.text = user?.name ?? "";
+      nameController.text = user?.firstName ?? "";
     });
   }
 
@@ -107,11 +107,11 @@ class _UserFormState extends State<UserForm> {
                     final newUser = widget.id != null
                         ? UserModel(
                             id: widget.id,
-                            name: name,
+                            firstName: name,
                             email: email,
                           )
                         : UserModel(
-                            name: name,
+                            firstName: name,
                             email: email,
                           );
 

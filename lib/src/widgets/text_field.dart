@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final IconData icon;
   final String hint;
   final bool isPassword;
+  final bool isNumeric;
   final bool isTextArea;
 
   const CustomTextField({
@@ -13,6 +15,7 @@ class CustomTextField extends StatefulWidget {
     required this.icon,
     required this.hint,
     this.isPassword = false,
+    this.isNumeric = false,
     this.isTextArea = false,
   });
 
@@ -42,6 +45,39 @@ class _CustomTextFieldState extends State<CustomTextField> {
           border: const OutlineInputBorder(borderSide: BorderSide.none),
         ),
         obscureText: widget.isPassword,
+      );
+    } else if (widget.isNumeric == true) {
+      return TextField(
+        keyboardType: TextInputType.number,
+        controller: widget.controller,
+        style: const TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          hintText: widget.hint,
+          hintStyle: const TextStyle(color: Colors.white38),
+          prefixIcon: Icon(
+            widget.icon,
+            color: Colors.white60,
+          ),
+          filled: true,
+          fillColor: Colors.white.withOpacity(0.1),
+          border: const OutlineInputBorder(borderSide: BorderSide.none),
+          suffixIcon: widget.isPassword
+              ? IconButton(
+                  icon: Icon(
+                    _obscureText
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    color: Colors.white60,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                )
+              : null,
+        ),
+        obscureText: widget.isPassword ? _obscureText : false,
       );
     } else {
       return TextField(

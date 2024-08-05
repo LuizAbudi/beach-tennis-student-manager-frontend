@@ -6,20 +6,35 @@ String userToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
   int? id;
-  String? name;
+  String? firstName;
+  String? lastName;
   String email;
   String? password;
+  String? Usertype;
+  String? level;
+  double? paymentValue;
+  int? paymentDate;
+  DateTime? lastPaymentDate;
+  int? teacherId;
 
   UserModel({
     this.id,
-    this.name,
+    this.firstName,
+    this.lastName,
     required this.email,
     this.password,
+    this.Usertype,
+    this.level,
+    this.paymentValue,
+    this.paymentDate,
+    this.lastPaymentDate,
+    this.teacherId,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
-        name: json["nome"],
+        firstName: json["firstName"],
+        lastName: json["lastName"],
         email: json["email"],
         password: json["password"],
       );
@@ -30,8 +45,16 @@ class UserModel {
       "senha": password,
     };
 
-    if (name != null) {
-      data["nome"] = name;
+    if (lastName != null) {
+      data["firstName"] = firstName;
+    }
+
+    if (lastName != null) {
+      data["lastName"] = lastName;
+    }
+
+    if (lastName != null) {
+      data["lastName"] = lastName;
     }
 
     if (id != null) {

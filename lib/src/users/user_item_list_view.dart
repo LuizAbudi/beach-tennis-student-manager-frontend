@@ -38,7 +38,7 @@ class _UserItemListViewState extends State<UserItemListView> {
 
       loggedUserModel = UserModel(
         id: decodedToken['id'],
-        name: decodedToken['name'],
+        firstName: decodedToken['name'],
         email: decodedToken['email'],
       );
     }
@@ -155,7 +155,7 @@ class _UserItemListViewState extends State<UserItemListView> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      item.name ?? '',
+                                      item.firstName ?? '',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: const TextStyle(

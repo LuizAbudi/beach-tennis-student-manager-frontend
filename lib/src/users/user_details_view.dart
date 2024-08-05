@@ -48,7 +48,7 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
             children: [
               _buildDetailItem(
                 icon: Icons.person_outline,
-                text: item?.name ?? 'Desconhecido',
+                text: item?.firstName ?? 'Desconhecido',
                 fontSize: 24,
                 color: Colors.deepOrange.shade400,
               ),

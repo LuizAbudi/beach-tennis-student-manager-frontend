@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+//import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:localstorage/localstorage.dart';
 
@@ -14,7 +14,7 @@ abstract class IHttpClient {
 class HttpClient implements IHttpClient {
   final client = http.Client();
   final token = localStorage.getItem('token');
-  final baseUrl = dotenv.get("API_URL");
+  final baseUrl = "https://beach-tennis-student-manager.onrender.com";
 
   @override
   Future get({required String url, int? id}) async {
@@ -27,7 +27,7 @@ class HttpClient implements IHttpClient {
     return await client.get(
       Uri.parse(baseUrl + newUrl),
       headers: {
-        'x-auth-token': token ?? "",
+        'authorization': 'Bearer $token',
       },
     );
   }

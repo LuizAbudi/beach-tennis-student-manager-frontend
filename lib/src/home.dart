@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
 
       loggedUserModel = UserModel(
         id: decodedToken['id'],
-        name: decodedToken['name'],
+        firstName: decodedToken['name'],
         email: decodedToken['email'],
       );
     }
@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               TextSpan(
-                text: loggedUserModel?.name ?? "Usuário",
+                text: loggedUserModel?.firstName ?? "Usuário",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white70,

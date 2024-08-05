@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/home.dart';
@@ -6,6 +8,8 @@ import 'package:mobile/src/register.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
 import 'package:mobile/src/widgets/text_field.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,7 +18,44 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+
+
 class _LoginPageState extends State<LoginPage> {
+  Future<void> Login() async {
+    final Map<String, dynamic> user = {
+      'email': emailController.text,
+      'password': passwordController.text,
+    };
+
+    final userJson = jsonEncode(user);
+    final response = await http.post(Uri.parse("https://beach-tennis-student-manager.onrender.com/api/login"), body: userJson, headers: {
+      'Content-Type': 'application/json',
+    });
+    print(response.statusCode);
+    print(response.body);
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      final responseData = jsonDecode(response.body);
+      final accessToken = responseData['access_token'];
+      // final prefs = await SharedPreferences.getInstance();
+      // await prefs.setString('access_token', accessToken);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Usuário logado com sucesso.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Erro ao logar usuário"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   final UserStore store = UserStore(
     controller: UserController(
       client: HttpClient(),
@@ -134,15 +175,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: 60),
             ElevatedButton(
-              onPressed: _handleLogin,
-              style: const ButtonStyle(
-                fixedSize: MaterialStatePropertyAll(Size(200, 50)),
-              ),
-              child: store.isLoading.value
-                  ? const CircularProgressIndicator()
-                  : const Text(
+              onPressed: () {
+                print("to no botão");
+                Login();
+              },
+              child: const Text(
                       "Entrar",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.black),
                     ),
             ),
             const SizedBox(height: 30),
@@ -156,11 +195,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 );
               },
-              child: Text(
+              child: const Text(
                 "Não é cadastrado? Cadastre-se agora.",
                 style: TextStyle(
                     fontWeight: FontWeight.w100,
-                    color: Colors.white.withOpacity(0.8)),
+                    color: Colors.white),
               ),
             )
           ],

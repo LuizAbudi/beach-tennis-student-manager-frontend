@@ -41,7 +41,7 @@ class _ActivityItemDetailsViewState extends State<ActivityItemDetailsView> {
 
       loggedUserModel = UserModel(
         id: decodedToken['id'],
-        name: decodedToken['name'],
+        firstName: decodedToken['name'],
         email: decodedToken['email'],
       );
     }
