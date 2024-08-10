@@ -16,9 +16,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   http: ^1.2.1
-  intl: ^0.18.1
+  intl: ^0.19.0
   jwt_decoder: ^2.0.1
   localstorage: ^5.0.0
+  google_fonts: ^4.0.3
 
 dev_dependencies:
   flutter_test:
@@ -34,4 +35,4 @@ flutter:
 
   assets:
     # Add assets from the images directory to the application.
-    - assets/images/
+    - assets/

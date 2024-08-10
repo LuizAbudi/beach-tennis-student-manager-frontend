@@ -5,7 +5,9 @@ import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/register.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
-import 'package:mobile/src/widgets/text_field.dart';
+import 'package:mobile/src/widgets/custom_button.dart';
+import 'package:mobile/src/widgets/custom_input.dart';
+import 'package:mobile/src/widgets/custom_text.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -98,54 +100,61 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildInputFields() {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.deepOrange, Colors.black54],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
+      decoration:
+          const BoxDecoration(color: Color.fromARGB(255, 248, 248, 251)),
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(
           children: [
             const SizedBox(height: 60),
-            const Text(
-              "Entrar",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1,
+            const CustomText(
+              text: "Bem-vindo ao CoachApp",
+              type: "header",
+            ),
+            const SizedBox(height: 60),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: const Image(
+                  image: AssetImage('assets/coachapp_logo.png'),
+                  width: 180,
+                  height: 180,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(height: 60),
-            CustomTextField(
+            CustomInput(
+              label: "Email",
+              placeholder: "Digite seu email",
               controller: emailController,
-              icon: Icons.person_outline,
-              hint: "Email",
             ),
-            const SizedBox(height: 32),
-            CustomTextField(
-              controller: passwordController,
-              icon: Icons.lock_outline,
-              hint: "Password",
+            const SizedBox(height: 16),
+            CustomInput(
+              label: "Senha",
+              placeholder: "Digite sua senha",
               isPassword: true,
+              controller: passwordController,
             ),
             const SizedBox(height: 60),
-            ElevatedButton(
+            CustomButton(
+              text: "Entrar",
+              width: MediaQuery.of(context).size.width,
+              height: 60,
               onPressed: _handleLogin,
-              style: const ButtonStyle(
-                fixedSize: MaterialStatePropertyAll(Size(200, 50)),
-              ),
-              child: store.isLoading.value
-                  ? const CircularProgressIndicator()
-                  : const Text(
-                      "Entrar",
-                      style: TextStyle(color: Colors.white),
-                    ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 60),
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
@@ -156,11 +165,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 );
               },
-              child: Text(
-                "Não é cadastrado? Cadastre-se agora.",
-                style: TextStyle(
-                    fontWeight: FontWeight.w100,
-                    color: Colors.white.withOpacity(0.8)),
+              child: const MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: CustomText(
+                  text: "Registrar",
+                  type: "paragraph",
+                ),
               ),
             )
           ],

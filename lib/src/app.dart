@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/src/home.dart';
 import 'package:mobile/src/login.dart';
@@ -59,7 +60,12 @@ class _MyAppState extends State<MyApp> {
         ],
         onGenerateTitle: (BuildContext context) =>
             AppLocalizations.of(context)!.appTitle,
-        theme: ThemeData(),
+        theme: ThemeData(
+          // Set the global font using GoogleFonts
+          textTheme: GoogleFonts.poppinsTextTheme(
+            Theme.of(context).textTheme,
+          ),
+        ),
         darkTheme: ThemeData.dark(),
         home: FutureBuilder(
           future: _checkToken(),
