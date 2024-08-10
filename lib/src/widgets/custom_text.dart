@@ -23,11 +23,11 @@ class CustomText extends StatelessWidget {
     FontWeight finalFontWeight;
 
     if (type == 'header') {
-      finalSize = 28;
+      finalSize = 22;
       finalFontWeight = FontWeight.bold;
     } else if (type == 'paragraph') {
-      finalSize = 16;
-      finalFontWeight = FontWeight.w500;
+      finalSize = 12;
+      finalFontWeight = FontWeight.w600;
     } else {
       finalSize = size ?? 16;
       finalFontWeight = fontWeight ?? FontWeight.normal;

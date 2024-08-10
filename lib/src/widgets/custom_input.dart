@@ -63,11 +63,15 @@ class _CustomInputState extends State<CustomInput> {
               filled: true,
               fillColor: Colors.white,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide.none,
               ),
-              prefixIcon:
-                  widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
+              prefixIcon: widget.prefixIcon != null
+                  ? Icon(
+                      widget.prefixIcon,
+                      color: const Color.fromRGBO(110, 111, 118, 0.6),
+                    )
+                  : null,
               suffixIcon: widget.isPassword
                   ? IconButton(
                       icon: Icon(
@@ -75,6 +79,7 @@ class _CustomInputState extends State<CustomInput> {
                             ? Icons.visibility
                             : Icons.visibility_off,
                       ),
+                      color: const Color.fromRGBO(110, 111, 118, 0.6),
                       onPressed: _togglePasswordVisibility,
                     )
                   : null,

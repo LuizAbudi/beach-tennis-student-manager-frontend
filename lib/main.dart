@@ -4,9 +4,11 @@ import 'package:localstorage/localstorage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'src/app.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await initLocalStorage();
-  await dotenv.load(fileName: '../../.env');
+  await dotenv.load();
 
   if (kDebugMode) {
     final apiUrl = dotenv.get("API_URL");

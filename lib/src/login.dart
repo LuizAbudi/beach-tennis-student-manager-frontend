@@ -110,8 +110,9 @@ class _LoginPageState extends State<LoginPage> {
             const CustomText(
               text: "Bem-vindo ao CoachApp",
               type: "header",
+              color: Color.fromRGBO(22, 24, 35, 0.9),
             ),
-            const SizedBox(height: 60),
+            const SizedBox(height: 30),
             Container(
               decoration: BoxDecoration(
                 boxShadow: [
@@ -128,33 +129,32 @@ class _LoginPageState extends State<LoginPage> {
                 borderRadius: BorderRadius.circular(20),
                 child: const Image(
                   image: AssetImage('assets/coachapp_logo.png'),
-                  width: 180,
-                  height: 180,
+                  width: 150,
+                  height: 150,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            const SizedBox(height: 60),
+            const SizedBox(height: 30),
             CustomInput(
               label: "Email",
               placeholder: "Digite seu email",
               controller: emailController,
             ),
-            const SizedBox(height: 16),
             CustomInput(
               label: "Senha",
               placeholder: "Digite sua senha",
               isPassword: true,
               controller: passwordController,
             ),
-            const SizedBox(height: 60),
+            const SizedBox(height: 40),
             CustomButton(
               text: "Entrar",
               width: MediaQuery.of(context).size.width,
               height: 60,
               onPressed: _handleLogin,
             ),
-            const SizedBox(height: 60),
+            const SizedBox(height: 30),
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
@@ -170,6 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: CustomText(
                   text: "Registrar",
                   type: "paragraph",
+                  color: Color.fromRGBO(22, 24, 35, 0.9),
                 ),
               ),
             )
