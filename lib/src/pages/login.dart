@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
-import 'package:mobile/src/home.dart';
+import 'package:mobile/src/pages/home.dart';
 import 'package:mobile/src/models/user_model.dart';
-import 'package:mobile/src/register.dart';
+import 'package:mobile/src/pages/register.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
 import 'package:mobile/src/widgets/custom_button.dart';
@@ -84,6 +84,15 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 248, 248, 251),
+        title: const CustomText(
+          text: "Bem-vindo ao CoachApp",
+          type: "header",
+          color: Color.fromRGBO(22, 24, 35, 0.9),
+        ),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -103,15 +112,9 @@ class _LoginPageState extends State<LoginPage> {
       decoration:
           const BoxDecoration(color: Color.fromARGB(255, 248, 248, 251)),
       child: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.only(left: 20, right: 20),
         child: Column(
           children: [
-            const SizedBox(height: 60),
-            const CustomText(
-              text: "Bem-vindo ao CoachApp",
-              type: "header",
-              color: Color.fromRGBO(22, 24, 35, 0.9),
-            ),
             const SizedBox(height: 30),
             Container(
               decoration: BoxDecoration(
@@ -135,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 60),
             CustomInput(
               label: "Email",
               placeholder: "Digite seu email",
@@ -151,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
             CustomButton(
               text: "Entrar",
               width: MediaQuery.of(context).size.width,
-              height: 60,
+              height: 50,
               onPressed: _handleLogin,
             ),
             const SizedBox(height: 30),

@@ -49,40 +49,43 @@ class _CustomInputState extends State<CustomInput> {
                 ),
               ),
             ),
-          TextField(
-            controller: widget.controller,
-            obscureText: widget.isPassword && !_isPasswordVisible,
-            style: const TextStyle(
-              color: Color.fromRGBO(110, 111, 118, 0.7),
-            ),
-            decoration: InputDecoration(
-              hintText: widget.placeholder,
-              hintStyle: const TextStyle(
+          SizedBox(
+            height: 50,
+            child: TextField(
+              controller: widget.controller,
+              obscureText: widget.isPassword && !_isPasswordVisible,
+              style: const TextStyle(
                 color: Color.fromRGBO(110, 111, 118, 0.7),
               ),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
+              decoration: InputDecoration(
+                hintText: widget.placeholder,
+                hintStyle: const TextStyle(
+                  color: Color.fromRGBO(110, 111, 118, 0.7),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide.none,
+                ),
+                prefixIcon: widget.prefixIcon != null
+                    ? Icon(
+                        widget.prefixIcon,
+                        color: const Color.fromRGBO(110, 111, 118, 0.6),
+                      )
+                    : null,
+                suffixIcon: widget.isPassword
+                    ? IconButton(
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                        color: const Color.fromRGBO(110, 111, 118, 0.6),
+                        onPressed: _togglePasswordVisibility,
+                      )
+                    : null,
               ),
-              prefixIcon: widget.prefixIcon != null
-                  ? Icon(
-                      widget.prefixIcon,
-                      color: const Color.fromRGBO(110, 111, 118, 0.6),
-                    )
-                  : null,
-              suffixIcon: widget.isPassword
-                  ? IconButton(
-                      icon: Icon(
-                        _isPasswordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                      ),
-                      color: const Color.fromRGBO(110, 111, 118, 0.6),
-                      onPressed: _togglePasswordVisibility,
-                    )
-                  : null,
             ),
           ),
         ],

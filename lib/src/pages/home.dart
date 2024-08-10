@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:mobile/src/activities/activity_item_list_view.dart';
 import 'package:mobile/src/activities/my_activity_item_list_view.dart';
-import 'package:mobile/src/login.dart';
 import 'package:mobile/src/models/user_model.dart';
-
-import 'activities/activity_item_list_view.dart';
-import 'users/user_item_list_view.dart';
+import 'package:mobile/src/pages/login.dart';
+import 'package:mobile/src/users/user_item_list_view.dart';
 
 class Home extends StatefulWidget {
   const Home({

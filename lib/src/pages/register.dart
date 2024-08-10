@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
-import 'package:mobile/src/login.dart';
 import 'package:mobile/src/models/user_model.dart';
+import 'package:mobile/src/pages/login.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
 import 'package:mobile/src/widgets/text_field.dart';
@@ -162,7 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 }
               },
               style: const ButtonStyle(
-                fixedSize: MaterialStatePropertyAll(Size(200, 50)),
+                fixedSize: WidgetStatePropertyAll(Size(200, 50)),
               ),
               child: store.isLoading.value
                   ? const CircularProgressIndicator()
