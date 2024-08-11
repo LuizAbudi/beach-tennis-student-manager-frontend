@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/models/user_model.dart';
-import 'package:mobile/src/pages/login.dart';
+import 'package:mobile/src/pages/register/success.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
 import 'package:mobile/src/widgets/custom_button.dart';
@@ -91,7 +91,7 @@ class _RegisterUserInfoPageState extends State<RegisterUserInfoPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const LoginPage(),
+          builder: (context) => const RegisterSuccessPage(),
         ),
       );
     }
