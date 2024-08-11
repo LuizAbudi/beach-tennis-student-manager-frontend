@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/pages/home.dart';
 import 'package:mobile/src/models/user_model.dart';
-import 'package:mobile/src/pages/register.dart';
+import 'package:mobile/src/pages/register/user_type.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
 import 'package:mobile/src/widgets/custom_button.dart';
@@ -62,21 +62,23 @@ class _LoginPageState extends State<LoginPage> {
     await store.login(login);
 
     if (store.error.value.isEmpty) {
-      Navigator.pushReplacement(
-        // ignore: use_build_context_synchronously
-        context,
-        MaterialPageRoute(
-          builder: (context) => const Home(),
-        ),
-      );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Home(),
+          ),
+        );
+      }
     } else {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(store.error.value),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(store.error.value),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       return;
     }
   }
@@ -161,10 +163,10 @@ class _LoginPageState extends State<LoginPage> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const RegisterPage(),
+                    builder: (context) => const RegisterUserTypePage(),
                   ),
                 );
               },

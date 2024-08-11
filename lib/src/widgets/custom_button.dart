@@ -21,8 +21,8 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width ?? 200, // Default width
-      height: height ?? 50, // Default height
+      width: width ?? double.infinity,
+      height: height ?? 50,
       decoration: BoxDecoration(
         gradient: color == null
             ? const LinearGradient(
@@ -34,30 +34,29 @@ class CustomButton extends StatelessWidget {
                 end: Alignment.bottomRight,
               )
             : null,
-        color: color, // If a color is provided, use it
+        color: color,
         borderRadius: BorderRadius.circular(50),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2), // Shadow color with opacity
-            spreadRadius: 2, // Spread of the shadow
-            blurRadius: 8, // Blur effect of the shadow
-            offset: const Offset(0, 2), // Position of the shadow (X, Y)
+            color: Colors.black.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor:
-              Colors.transparent, // Makes the button background transparent
-          shadowColor: Colors.transparent, // Removes shadow
+          backgroundColor: Colors.transparent,
+          shadowColor: Colors.transparent,
         ),
-        onPressed: onPressed, // Call the onPressed callback
+        onPressed: onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (icon != null) ...[
               Icon(icon, color: Colors.white),
-              const SizedBox(width: 8), // Adds space between icon and text
+              const SizedBox(width: 8),
             ],
             Text(
               text,

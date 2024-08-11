@@ -6,7 +6,7 @@ class CustomText extends StatelessWidget {
   final double? size;
   final Color? color;
   final FontWeight? fontWeight;
-  final String type; // Add type parameter
+  final String? type;
 
   const CustomText({
     super.key,
@@ -14,7 +14,7 @@ class CustomText extends StatelessWidget {
     this.size,
     this.color,
     this.fontWeight,
-    this.type = 'header', // Default type is paragraph
+    this.type,
   });
 
   @override
@@ -26,7 +26,7 @@ class CustomText extends StatelessWidget {
       finalSize = 22;
       finalFontWeight = FontWeight.bold;
     } else if (type == 'paragraph') {
-      finalSize = 12;
+      finalSize = 14;
       finalFontWeight = FontWeight.w600;
     } else {
       finalSize = size ?? 16;
