@@ -27,7 +27,7 @@ class HttpClient implements IHttpClient {
     return await client.get(
       Uri.parse(baseUrl + newUrl),
       headers: {
-        'x-auth-token': token ?? "",
+        'Authorization': "Bearer $token",
       },
     );
   }
@@ -40,7 +40,7 @@ class HttpClient implements IHttpClient {
       headers: {
         "Accept": "application/json",
         'Content-Type': 'application/json',
-        'x-auth-token': token ?? ""
+        'Authorization': "Bearer $token",
       },
     );
   }
@@ -53,7 +53,7 @@ class HttpClient implements IHttpClient {
       headers: {
         "Accept": "application/json",
         'Content-Type': 'application/json',
-        'x-auth-token': token ?? ""
+        'Authorization': "Bearer $token",
       },
     );
   }
@@ -65,7 +65,7 @@ class HttpClient implements IHttpClient {
     return await client.delete(
       Uri.parse(baseUrl + newUrl),
       headers: {
-        'x-auth-token': token ?? "",
+        'Authorization': "Bearer $token",
       },
     );
   }

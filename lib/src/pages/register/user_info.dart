@@ -83,9 +83,20 @@ class _RegisterUserInfoPageState extends State<RegisterUserInfoPage> {
       name: nameController.text,
       email: emailController.text,
       password: passwordController.text,
+      userType: widget.userType,
     );
 
     await store.createUser(newUser);
+
+    if (mounted && store.error.value.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Ocorreu um erro'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
 
     if (mounted && !store.isLoading.value) {
       Navigator.pushReplacement(
@@ -181,10 +192,17 @@ class _RegisterUserInfoPageState extends State<RegisterUserInfoPage> {
               isPassword: true,
             ),
             const SizedBox(height: 40),
-            CustomButton(
-              onPressed: _handleSubmit,
-              text: "Cadastrar",
-              height: 50,
+            ValueListenableBuilder<bool>(
+              valueListenable: store.isLoading,
+              builder: (context, isLoading, child) {
+                return CustomButton(
+                  text: "Cadastrar",
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  onPressed: _handleSubmit,
+                  isLoading: isLoading,
+                );
+              },
             ),
           ],
         ),

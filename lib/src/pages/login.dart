@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/pages/home.dart';
 import 'package:mobile/src/models/user_model.dart';
-import 'package:mobile/src/pages/register/success.dart';
 import 'package:mobile/src/pages/register/user_type.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
@@ -154,11 +153,17 @@ class _LoginPageState extends State<LoginPage> {
               controller: passwordController,
             ),
             const SizedBox(height: 40),
-            CustomButton(
-              text: "Entrar",
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-              onPressed: _handleLogin,
+            ValueListenableBuilder<bool>(
+              valueListenable: store.isLoading,
+              builder: (context, isLoading, child) {
+                return CustomButton(
+                  text: "Entrar",
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  onPressed: _handleLogin,
+                  isLoading: isLoading,
+                );
+              },
             ),
             const SizedBox(height: 30),
             GestureDetector(

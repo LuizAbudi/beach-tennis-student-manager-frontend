@@ -14,7 +14,7 @@ abstract class IUserController {
 
 class UserController implements IUserController {
   final IHttpClient client;
-  final baseUrl = "/usuarios";
+  final baseUrl = "/api/users";
 
   UserController({required this.client});
 
@@ -41,7 +41,8 @@ class UserController implements IUserController {
   Future<void> createUser(UserModel user) async {
     final Map<String, dynamic> data = user.toJson();
 
-    final response = await client.post(url: baseUrl, body: data);
+    const registerUrl = "/api/register";
+    final response = await client.post(url: registerUrl, body: data);
 
     if (response.statusCode != 201) {
       final responseData = jsonDecode(response.body);
@@ -52,14 +53,14 @@ class UserController implements IUserController {
   @override
   Future<String> login(UserModel user) async {
     final Map<String, dynamic> data = user.toJson();
-    final loginUrl = '$baseUrl/login';
+    const loginUrl = '/api/login';
 
     final response = await client.post(url: loginUrl, body: data);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       final responseData = jsonDecode(response.body);
 
-      final token = responseData['data'];
+      final token = responseData['access_token'];
 
       return token;
     } else {
