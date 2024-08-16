@@ -20,9 +20,9 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
 
   final tabs = [
+    const UserItemListView(),
     const ActivityItemListView(),
     const MyActivityItemListView(),
-    const UserItemListView()
   ];
 
   UserModel? loggedUserModel;
@@ -63,6 +63,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(246, 248, 249, 1),
       appBar: AppBar(
         title: RichText(
           text: TextSpan(
@@ -71,7 +72,7 @@ class _HomeState extends State<Home> {
                 text: 'Olá, ',
                 style: TextStyle(
                   fontWeight: FontWeight.w300,
-                  color: Colors.white54,
+                  color: Color.fromRGBO(22, 24, 35, 1),
                   fontSize: 22,
                 ),
               ),
@@ -79,7 +80,7 @@ class _HomeState extends State<Home> {
                 text: loggedUserModel?.name ?? "Usuário",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.white70,
+                  color: Color.fromRGBO(22, 24, 35, 1),
                   fontSize: 22,
                 ),
               ),
@@ -91,7 +92,7 @@ class _HomeState extends State<Home> {
             onPressed: _logout,
             icon: const Icon(
               Icons.logout,
-              color: Colors.deepOrange,
+              color: Color.fromRGBO(22, 24, 35, 1),
             ),
           )
         ],
@@ -100,30 +101,72 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        selectedFontSize: 16,
-        selectedItemColor: Colors.deepOrange.shade500,
-        unselectedItemColor: Colors.white54,
+        selectedFontSize: 13,
+        selectedItemColor: const Color.fromRGBO(255, 98, 62, 1),
         unselectedFontSize: 12,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assignment),
-            label: "Todas Atividades",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assessment_outlined),
-            label: "Minhas Atividades",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: "Usuários",
-          )
-        ],
-        onTap: (index) => {
+        backgroundColor: Colors.white,
+        items: List.generate(3, (index) {
+          return BottomNavigationBarItem(
+            icon: _buildIcon(index, context),
+            label: _getLabel(index),
+          );
+        }),
+        onTap: (index) {
           setState(() {
             _currentIndex = index;
-          })
+          });
         },
       ),
     );
+  }
+
+  Widget _buildIcon(int index, BuildContext context) {
+    final bool isSelected = _currentIndex == index;
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        if (isSelected)
+          Container(
+            width: 60,
+            height: 32,
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(255, 98, 62, 0.2),
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+            ),
+          ),
+        Icon(
+          _getIcon(index),
+          color: isSelected
+              ? const Color.fromRGBO(255, 98, 62, 1)
+              : const Color.fromRGBO(22, 24, 35, 0.6),
+        ),
+      ],
+    );
+  }
+
+  IconData _getIcon(int index) {
+    switch (index) {
+      case 0:
+        return Icons.people;
+      case 1:
+        return Icons.assignment;
+      case 2:
+      default:
+        return Icons.person;
+    }
+  }
+
+  String _getLabel(int index) {
+    switch (index) {
+      case 0:
+        return "Alunos";
+      case 1:
+        return "Aulas";
+      case 2:
+      default:
+        return "Meu Perfil";
+    }
   }
 }

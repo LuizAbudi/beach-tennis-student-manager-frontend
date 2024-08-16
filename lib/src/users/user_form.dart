@@ -55,8 +55,9 @@ class _UserFormState extends State<UserForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(246, 248, 249, 1),
       appBar: AppBar(
-        title: const Text('Voltar'),
+        title: const Text('Cadastro de aluno'),
       ),
       body: Center(
         child: Center(
@@ -127,9 +128,9 @@ class _UserFormState extends State<UserForm> {
                     }
                   },
                   style: const ButtonStyle(
-                    fixedSize: MaterialStatePropertyAll(Size(200, 50)),
+                    fixedSize: WidgetStatePropertyAll(Size(200, 50)),
                     backgroundColor:
-                        MaterialStatePropertyAll<Color>(Colors.deepOrange),
+                        WidgetStatePropertyAll<Color>(Colors.deepOrange),
                   ),
                   child: Text(
                     widget.id != null ? 'Editar' : 'Criar',

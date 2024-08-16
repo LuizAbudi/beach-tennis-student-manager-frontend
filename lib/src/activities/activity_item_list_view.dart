@@ -176,25 +176,6 @@ class _ActivityItemListViewState extends State<ActivityItemListView> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          bool willRefresh = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ActivityForm(),
-            ),
-          );
-
-          if (willRefresh) {
-            store.getActivities();
-          }
-        },
-        backgroundColor: Colors.deepOrange.shade500,
-        child: const Icon(
-          Icons.assignment_add,
-          color: Colors.white70,
-        ),
-      ),
     );
   }
 }

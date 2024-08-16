@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
+import 'package:mobile/src/helpers/handle_erros.dart';
 import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/pages/register/success.dart';
 import 'package:mobile/src/services/http_client.dart';
@@ -9,9 +10,7 @@ import 'package:mobile/src/widgets/custom_input.dart';
 import 'package:mobile/src/widgets/custom_text.dart';
 
 class RegisterUserInfoPage extends StatefulWidget {
-  final String userType;
-
-  const RegisterUserInfoPage({super.key, required this.userType});
+  const RegisterUserInfoPage({super.key});
 
   @override
   State<RegisterUserInfoPage> createState() => _RegisterUserInfoPageState();
@@ -59,23 +58,14 @@ class _RegisterUserInfoPageState extends State<RegisterUserInfoPage> {
         email.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor, preencha o formulário.'),
-          backgroundColor: Colors.red,
-        ),
-      );
-
+      const HandleErros(errorMessage: "Por favor, preencha o formulário.")
+          .showError(context);
       return;
     }
 
     if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('As senhas não coincidem.'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      const HandleErros(errorMessage: "As senhas não coincidem.")
+          .showError(context);
       return;
     }
 
@@ -83,18 +73,13 @@ class _RegisterUserInfoPageState extends State<RegisterUserInfoPage> {
       name: nameController.text,
       email: emailController.text,
       password: passwordController.text,
-      userType: widget.userType,
+      userType: "teacher",
     );
 
     await store.createUser(newUser);
 
     if (mounted && store.error.value.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Ocorreu um erro'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      HandleErros(errorMessage: store.error.value).showError(context);
       return;
     }
 

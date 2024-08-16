@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/pages/home.dart';
 import 'package:mobile/src/models/user_model.dart';
-import 'package:mobile/src/pages/register/user_type.dart';
+import 'package:mobile/src/pages/register/user_info.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
 import 'package:mobile/src/widgets/custom_button.dart';
@@ -172,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const RegisterUserTypePage(),
+                    builder: (context) => const RegisterUserInfoPage(),
                   ),
                 );
               },

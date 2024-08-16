@@ -46,7 +46,7 @@ class UserController implements IUserController {
 
     if (response.statusCode != 201) {
       final responseData = jsonDecode(response.body);
-      throw responseData['error']['message'];
+      throw responseData['message'];
     }
   }
 

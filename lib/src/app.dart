@@ -47,43 +47,43 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        restorationScopeId: 'app',
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en', ''),
-        ],
-        onGenerateTitle: (BuildContext context) =>
-            AppLocalizations.of(context)!.appTitle,
-        theme: ThemeData(
-          // Set the global font using GoogleFonts
-          textTheme: GoogleFonts.poppinsTextTheme(
-            Theme.of(context).textTheme,
-          ),
+      restorationScopeId: 'app',
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+      ],
+      onGenerateTitle: (BuildContext context) =>
+          AppLocalizations.of(context)!.appTitle,
+      theme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(
+          Theme.of(context).textTheme,
         ),
-        darkTheme: ThemeData.dark(),
-        home: FutureBuilder(
-          future: _checkToken(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
+      ),
+      darkTheme: ThemeData.dark(),
+      home: FutureBuilder(
+        future: _checkToken(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            if (snapshot.hasData && snapshot.data!) {
+              return const Home();
             } else {
-              if (snapshot.hasData && snapshot.data!) {
-                return const Home();
-              } else {
-                return const LoginPage();
-              }
+              return const LoginPage();
             }
-          },
-        ));
+          }
+        },
+      ),
+    );
   }
 }

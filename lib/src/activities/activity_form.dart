@@ -92,7 +92,7 @@ class _ActivityFormState extends State<ActivityForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Voltar'),
+        title: const Text('Cadastro de aulas'),
       ),
       body: Center(
         child: Center(
@@ -189,9 +189,9 @@ class _ActivityFormState extends State<ActivityForm> {
                     }
                   },
                   style: const ButtonStyle(
-                    fixedSize: MaterialStatePropertyAll(Size(200, 50)),
+                    fixedSize: WidgetStatePropertyAll(Size(200, 50)),
                     backgroundColor:
-                        MaterialStatePropertyAll<Color>(Colors.deepOrange),
+                        WidgetStatePropertyAll<Color>(Colors.deepOrange),
                   ),
                   child: Text(
                     widget.id != null ? 'Editar' : 'Criar',

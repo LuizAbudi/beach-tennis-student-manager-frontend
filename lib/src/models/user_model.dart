@@ -23,7 +23,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
-        name: json["firstName"] + " " + json["lastName"],
+        name: json["name"],
         email: json["email"],
         password: json["password"],
         userType: json["userType"],
@@ -36,10 +36,8 @@ class UserModel {
       "password": password,
     };
 
-    if (name?.isNotEmpty ?? false) {
-      List<String> nameParts = name!.split(' ');
-      data["firstName"] = nameParts.first;
-      data["lastName"] = nameParts.length > 1 ? nameParts.last : '';
+    if (name != null) {
+      data["name"] = name;
     }
 
     if (level != null) {
