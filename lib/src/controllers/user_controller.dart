@@ -20,13 +20,13 @@ class UserController implements IUserController {
 
   @override
   Future<List<UserModel>> getUsers() async {
-    final response = await client.get(url: baseUrl);
+    final response = await client.get(url: "$baseUrl/all");
 
     if (response.statusCode == 200) {
       final List<UserModel> users = [];
       final body = jsonDecode(response.body);
 
-      body['data'].map((item) {
+      body.map((item) {
         final UserModel user = UserModel.fromJson(item);
         users.add(user);
       }).toList();
