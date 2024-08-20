@@ -20,7 +20,7 @@ class UserController implements IUserController {
 
   @override
   Future<List<UserModel>> getUsers() async {
-    final response = await client.get(url: "$baseUrl/all");
+    final response = await client.get(url: "/api/students/all");
 
     if (response.statusCode == 200) {
       final List<UserModel> users = [];
@@ -40,7 +40,7 @@ class UserController implements IUserController {
   @override
   Future<void> createUser(UserModel user) async {
     final Map<String, dynamic> data = user.toJson();
-
+    print(data);
     const registerUrl = "/api/register";
     final response = await client.post(url: registerUrl, body: data);
 

@@ -87,7 +87,10 @@ class _RegisterUserInfoPageState extends State<RegisterUserInfoPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const RegisterSuccessPage(),
+          builder: (context) => RegisterSuccessPage(
+            email: email,
+            password: password,
+          ),
         ),
       );
     }

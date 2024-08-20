@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
+import 'package:mobile/src/widgets/custom_button.dart';
 import 'package:mobile/src/widgets/custom_input.dart';
+import 'package:mobile/src/widgets/level_selector.dart';
 
 class UserForm extends StatefulWidget {
   final int? id;
@@ -23,14 +27,29 @@ class _UserFormState extends State<UserForm> {
 
   late TextEditingController emailController;
   late TextEditingController nameController;
+  late TextEditingController levelController;
+
+  UserModel? loggedUserModel;
+  final loggedUser = localStorage.getItem('token');
 
   @override
   void initState() {
     emailController = TextEditingController();
     nameController = TextEditingController();
+    levelController = TextEditingController();
 
     if (widget.id != null) {
       _loadUser();
+    }
+
+    if (loggedUser != null) {
+      final Map<String, dynamic> decodedToken = JwtDecoder.decode(loggedUser!);
+
+      loggedUserModel = UserModel(
+        id: decodedToken['id'],
+        name: decodedToken['name'],
+        email: decodedToken['email'],
+      );
     }
 
     super.initState();
@@ -40,8 +59,54 @@ class _UserFormState extends State<UserForm> {
   void dispose() {
     emailController.dispose();
     nameController.dispose();
+    levelController.dispose();
 
     super.dispose();
+  }
+
+  void _onSubmitStudent() async {
+    final email = emailController.text;
+    final name = nameController.text;
+    final level = levelController.text;
+
+    if (email.isEmpty || name.isEmpty || level.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Por favor, preencha o formulário.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+
+      return;
+    }
+
+    final newUser = widget.id != null
+        ? UserModel(
+            id: widget.id,
+            name: name,
+            email: email,
+            level: level,
+            userType: "student",
+            teacherId: loggedUserModel?.id,
+          )
+        : UserModel(
+            name: name,
+            email: email,
+            level: level,
+            userType: "student",
+            password: "12345abc",
+            teacherId: loggedUserModel?.id,
+          );
+
+    if (widget.id != null) {
+      await store.updateUser(newUser);
+    } else {
+      await store.createUser(newUser);
+    }
+
+    if (mounted && !store.isLoading.value) {
+      Navigator.pop(context, true);
+    }
   }
 
   Future<void> _loadUser() async {
@@ -58,76 +123,37 @@ class _UserFormState extends State<UserForm> {
       backgroundColor: const Color.fromRGBO(246, 248, 249, 1),
       appBar: AppBar(
         title: const Text('Cadastro de aluno'),
+        backgroundColor: Colors.white,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(32.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const SizedBox(height: 32),
+            CustomInput(
+              placeholder: "Informe o nome",
+              controller: nameController,
+              prefixIcon: Icons.person_outline,
+              label: "Nome completo",
+            ),
             CustomInput(
               placeholder: "Informe o email",
               controller: emailController,
               prefixIcon: Icons.email_outlined,
               label: "E-mail",
             ),
-            const SizedBox(height: 32),
-            CustomInput(
-              placeholder: "Informe o nome",
-              controller: nameController,
-              prefixIcon: Icons.person_outline,
-              label: "Nome",
-            ),
-            const SizedBox(height: 60),
-            ElevatedButton(
-              onPressed: () async {
-                final email = emailController.text;
-                final name = nameController.text;
-
-                if (email.isEmpty || name.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Por favor, preencha o formulário.'),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-
-                  return;
-                }
-
-                final newUser = widget.id != null
-                    ? UserModel(
-                        id: widget.id,
-                        name: name,
-                        email: email,
-                      )
-                    : UserModel(
-                        name: name,
-                        email: email,
-                      );
-
-                if (widget.id != null) {
-                  await store.updateUser(newUser);
-                } else {
-                  await store.createUser(newUser);
-                }
-
-                if (!store.isLoading.value) {
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context, true);
-                }
+            const SizedBox(height: 8),
+            LevelSelector(
+              levels: const ['PRO', 'A', 'B', 'C', 'D'],
+              onSelectedLevelChanged: (selectedLevel) {
+                levelController.text = selectedLevel;
               },
-              style: const ButtonStyle(
-                fixedSize: WidgetStatePropertyAll(Size(200, 50)),
-                backgroundColor: WidgetStatePropertyAll<Color>(
-                  Color.fromRGBO(255, 98, 62, 1),
-                ),
-              ),
-              child: Text(
-                widget.id != null ? 'Editar' : 'Cadastrar',
-                style: const TextStyle(color: Colors.white),
-              ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
+            CustomButton(
+              text: "Cadastrar",
+              onPressed: _onSubmitStudent,
+              isLoading: store.isLoading.value,
+            ),
           ],
         ),
       ),

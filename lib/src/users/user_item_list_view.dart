@@ -7,6 +7,7 @@ import 'package:mobile/src/pages/login.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
 import 'package:mobile/src/users/user_form.dart';
+import 'package:mobile/src/widgets/custom_button.dart';
 import 'package:mobile/src/widgets/student_card.dart';
 
 class UserItemListView extends StatefulWidget {
@@ -57,8 +58,7 @@ class _UserItemListViewState extends State<UserItemListView> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title:
-                const Text("Seus dados serão removidos, tem certeza disso ?"),
+            title: const Text("Seus dados serão removidos, tem certeza disso?"),
             actions: <Widget>[
               TextButton(
                 child: const Text(
@@ -102,56 +102,65 @@ class _UserItemListViewState extends State<UserItemListView> {
     });
   }
 
-  // void _deleteUser(int userId) async {
-  //   _logout(showConfirmationDialog: true, userId: userId);
-  //   setState(() {});
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(246, 248, 249, 1),
-      body: AnimatedBuilder(
-        animation:
-            Listenable.merge([store.isLoading, store.error, store.state]),
-        builder: (context, child) {
-          if (store.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: Stack(
+        children: [
+          AnimatedBuilder(
+            animation:
+                Listenable.merge([store.isLoading, store.error, store.state]),
+            builder: (context, child) {
+              if (store.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          return ListView.separated(
-            itemBuilder: (_, index) {
-              final student = store.state.value[index];
+              return ListView.separated(
+                itemBuilder: (_, index) {
+                  final student = store.state.value[index];
 
-              return GestureDetector(
-                onTap: () {},
-                child: StudentCard(
-                  name: student.name!,
-                  plan: "A",
-                  imageUrl:
-                      "https://img.freepik.com/fotos-gratis/homem-bonito-e-confiante-sorrindo-com-as-maos-cruzadas-no-peito_176420-18743.jpg?w=1380&t=st=1723772908~exp=1723773508~hmac=9a28067cf0c054180782121a762662f15d8eae032a118882fe37b265d24407b3",
-                  paymentStatus: "pago",
-                  level: "Intermediário",
+                  return GestureDetector(
+                    onTap: () {},
+                    child: StudentCard(
+                      name: student.name!,
+                      plan: "A",
+                      imageUrl:
+                          "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
+                      paymentStatus: "pago",
+                      level: "Intermediário",
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
+                itemCount: store.state.value.length,
+                padding: const EdgeInsets.only(
+                  top: 16,
+                  left: 16,
+                  right: 16,
+                  bottom: 80,
                 ),
               );
             },
-            separatorBuilder: (context, index) => const SizedBox(height: 8),
-            itemCount: store.state.value.length,
-            padding: const EdgeInsets.all(16),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const UserForm(),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CustomButton(
+                text: "Cadastrar aluno",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UserForm(),
+                    ),
+                  );
+                },
+              ),
             ),
-          );
-        },
-        backgroundColor: const Color.fromRGBO(255, 98, 62, 1),
-        child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }

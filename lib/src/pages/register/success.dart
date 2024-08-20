@@ -1,17 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/src/controllers/user_controller.dart';
+import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/pages/home.dart';
+import 'package:mobile/src/services/http_client.dart';
+import 'package:mobile/src/stores/user_stores.dart';
 import 'package:mobile/src/widgets/custom_button.dart';
 import 'package:mobile/src/widgets/custom_text.dart';
 import 'package:mobile/src/widgets/pulse_icon.dart';
 
 class RegisterSuccessPage extends StatefulWidget {
-  const RegisterSuccessPage({super.key});
+  final String email;
+  final String password;
+
+  const RegisterSuccessPage(
+      {super.key, required this.email, required this.password});
 
   @override
   State<RegisterSuccessPage> createState() => RegisterSuccessPageState();
 }
 
 class RegisterSuccessPageState extends State<RegisterSuccessPage> {
+  final UserStore store = UserStore(
+    controller: UserController(
+      client: HttpClient(),
+    ),
+  );
+
+  void _handleStart() async {
+    final login = UserModel(email: widget.email, password: widget.password);
+
+    await store.login(login);
+
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Home(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +50,7 @@ class RegisterSuccessPageState extends State<RegisterSuccessPage> {
             SizedBox(
               height: MediaQuery.sizeOf(context).height,
               width: double.infinity,
-              child: _buildInputFields(),
+              child: _buildView(),
             ),
           ],
         ),
@@ -29,7 +58,7 @@ class RegisterSuccessPageState extends State<RegisterSuccessPage> {
     );
   }
 
-  Widget _buildInputFields() {
+  Widget _buildView() {
     return Container(
       decoration:
           const BoxDecoration(color: Color.fromARGB(255, 248, 248, 251)),
@@ -57,14 +86,7 @@ class RegisterSuccessPageState extends State<RegisterSuccessPage> {
             ),
             const SizedBox(height: 40),
             CustomButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Home(),
-                  ),
-                );
-              },
+              onPressed: _handleStart,
               text: "Começar",
               height: 50,
             ),
