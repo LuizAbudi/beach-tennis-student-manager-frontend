@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
+import 'package:mobile/src/models/student_model.dart';
 import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
@@ -80,28 +81,30 @@ class _UserFormState extends State<UserForm> {
       return;
     }
 
-    final newUser = widget.id != null
-        ? UserModel(
+    final userModel = UserModel(
+      email: email,
+      name: name,
+      userType: "student",
+      password: "1234abc",
+    );
+
+    final newStudent = widget.id != null
+        ? StudentModel(
             id: widget.id,
-            name: name,
-            email: email,
             level: level,
-            userType: "student",
+            user: userModel,
             teacherId: loggedUserModel?.id,
           )
-        : UserModel(
-            name: name,
-            email: email,
+        : StudentModel(
             level: level,
-            userType: "student",
-            password: "12345abc",
+            user: userModel,
             teacherId: loggedUserModel?.id,
           );
 
     if (widget.id != null) {
-      await store.updateUser(newUser);
+      await store.updateUser(newStudent);
     } else {
-      await store.createUser(newUser);
+      await store.createStudent(newStudent);
     }
 
     if (mounted && !store.isLoading.value) {
@@ -110,10 +113,10 @@ class _UserFormState extends State<UserForm> {
   }
 
   Future<void> _loadUser() async {
-    final user = await store.getUserById(widget.id!);
+    final student = await store.getUserById(widget.id!);
     setState(() {
-      emailController.text = user?.email ?? "";
-      nameController.text = user?.name ?? "";
+      emailController.text = student?.user.email ?? "";
+      nameController.text = student?.user.name ?? "";
     });
   }
 

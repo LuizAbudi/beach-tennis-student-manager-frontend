@@ -5,7 +5,7 @@ import 'package:mobile/src/activities/activity_item_list_view.dart';
 import 'package:mobile/src/activities/my_activity_item_list_view.dart';
 import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/pages/login.dart';
-import 'package:mobile/src/users/user_item_list_view.dart';
+import 'package:mobile/src/students/student_item_list_view.dart';
 
 class Home extends StatefulWidget {
   const Home({

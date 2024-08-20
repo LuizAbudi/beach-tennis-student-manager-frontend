@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
-import 'package:mobile/src/models/user_model.dart';
+import 'package:mobile/src/models/student_model.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
 
@@ -20,7 +20,7 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
     ),
   );
 
-  UserModel? item;
+  StudentModel? item;
 
   @override
   void initState() {
@@ -29,9 +29,9 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
   }
 
   Future<void> _loadUser() async {
-    final user = await store.getUserById(widget.id);
+    final student = await store.getUserById(widget.id);
     setState(() {
-      item = user;
+      item = student;
     });
   }
 
@@ -48,7 +48,7 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
             children: [
               _buildDetailItem(
                 icon: Icons.person_outline,
-                text: item?.name ?? 'Desconhecido',
+                text: item?.user.name ?? 'Desconhecido',
                 fontSize: 24,
                 color: Colors.deepOrange.shade400,
               ),
@@ -59,7 +59,7 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
               ),
               _buildDetailItem(
                 icon: Icons.email_outlined,
-                text: item?.email ?? 'Sem e-mail',
+                text: item?.user.email ?? 'Sem e-mail',
                 fontSize: 20,
                 color: Colors.deepOrange.shade400,
               ),

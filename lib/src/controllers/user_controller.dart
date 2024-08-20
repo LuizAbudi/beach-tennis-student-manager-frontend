@@ -1,15 +1,17 @@
 import 'dart:convert';
 
+import 'package:mobile/src/models/student_model.dart';
 import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/services/http_client.dart';
 
 abstract class IUserController {
-  Future<List<UserModel>> getUsers();
+  Future<List<StudentModel>> getStudents();
   Future<void> createUser(UserModel user);
+  Future<void> createStudent(StudentModel user);
   Future<String> login(UserModel user);
-  Future<void> updateUser(UserModel user);
+  Future<void> updateUser(StudentModel user);
   Future<void> deleteUser(int id);
-  Future<UserModel?> getUserById(int id);
+  Future<StudentModel?> getUserById(int id);
 }
 
 class UserController implements IUserController {
@@ -19,15 +21,16 @@ class UserController implements IUserController {
   UserController({required this.client});
 
   @override
-  Future<List<UserModel>> getUsers() async {
+  Future<List<StudentModel>> getStudents() async {
     final response = await client.get(url: "/api/students/all");
 
     if (response.statusCode == 200) {
-      final List<UserModel> users = [];
+      final List<StudentModel> users = [];
       final body = jsonDecode(response.body);
 
       body.map((item) {
-        final UserModel user = UserModel.fromJson(item);
+        final StudentModel user = StudentModel.fromJson(item);
+        print(user);
         users.add(user);
       }).toList();
 
@@ -40,7 +43,20 @@ class UserController implements IUserController {
   @override
   Future<void> createUser(UserModel user) async {
     final Map<String, dynamic> data = user.toJson();
-    print(data);
+
+    const registerUrl = "/api/register";
+    final response = await client.post(url: registerUrl, body: data);
+
+    if (response.statusCode != 201) {
+      final responseData = jsonDecode(response.body);
+      throw responseData['message'];
+    }
+  }
+
+  @override
+  Future<void> createStudent(StudentModel user) async {
+    final Map<String, dynamic> data = user.toJson();
+
     const registerUrl = "/api/register";
     final response = await client.post(url: registerUrl, body: data);
 
@@ -70,7 +86,7 @@ class UserController implements IUserController {
   }
 
   @override
-  Future<void> updateUser(UserModel user) async {
+  Future<void> updateUser(StudentModel user) async {
     final Map<String, dynamic> data = user.toJson();
 
     final response = await client.put(url: baseUrl, body: data);
@@ -92,7 +108,7 @@ class UserController implements IUserController {
   }
 
   @override
-  Future<UserModel?> getUserById(int id) async {
+  Future<StudentModel?> getUserById(int id) async {
     final response = await client.get(url: baseUrl, id: id);
 
     if (response.statusCode == 200) {
@@ -101,7 +117,7 @@ class UserController implements IUserController {
       if (body.containsKey('data')) {
         final item = body['data'];
 
-        final UserModel user = UserModel.fromJson(item);
+        final StudentModel user = StudentModel.fromJson(item);
 
         return user;
       }

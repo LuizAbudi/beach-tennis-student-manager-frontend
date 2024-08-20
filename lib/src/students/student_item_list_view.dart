@@ -3,10 +3,9 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/models/user_model.dart';
-import 'package:mobile/src/pages/login.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
-import 'package:mobile/src/users/user_form.dart';
+import 'package:mobile/src/students/student_form.dart';
 import 'package:mobile/src/widgets/custom_button.dart';
 import 'package:mobile/src/widgets/student_card.dart';
 
@@ -44,62 +43,7 @@ class _UserItemListViewState extends State<UserItemListView> {
       );
     }
 
-    store.getUsers();
-  }
-
-  Future<bool> _checkToken() async {
-    final token = localStorage.getItem('token');
-    return token != null;
-  }
-
-  void _logout({bool showConfirmationDialog = false, int? userId}) {
-    if (showConfirmationDialog) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Seus dados serão removidos, tem certeza disso?"),
-            actions: <Widget>[
-              TextButton(
-                child: const Text(
-                  "Sim",
-                  style: TextStyle(color: Colors.green),
-                ),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  await store.deleteUser(userId!);
-                  _performLogout();
-                },
-              ),
-              TextButton(
-                child: const Text(
-                  "Não",
-                  style: TextStyle(color: Colors.red),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      _performLogout();
-    }
-  }
-
-  void _performLogout() {
-    localStorage.clear();
-    loggedUserModel = null;
-    _checkToken().then((loggedIn) {
-      if (!loggedIn) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()),
-        );
-      }
-    });
+    store.getStudents();
   }
 
   @override
@@ -123,8 +67,8 @@ class _UserItemListViewState extends State<UserItemListView> {
                   return GestureDetector(
                     onTap: () {},
                     child: StudentCard(
-                      name: student.name!,
-                      plan: "A",
+                      name: student.user.name!,
+                      plan: student.level!,
                       imageUrl:
                           "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
                       paymentStatus: "pago",

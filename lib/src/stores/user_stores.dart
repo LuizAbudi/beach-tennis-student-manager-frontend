@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
+import 'package:mobile/src/models/student_model.dart';
 import 'package:mobile/src/models/user_model.dart';
 
 class UserStore {
@@ -8,19 +9,19 @@ class UserStore {
 
   final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
-  final ValueNotifier<List<UserModel>> state =
-      ValueNotifier<List<UserModel>>([]);
+  final ValueNotifier<List<StudentModel>> state =
+      ValueNotifier<List<StudentModel>>([]);
 
   final ValueNotifier<String> error = ValueNotifier<String>("");
 
   UserStore({required this.controller});
 
-  Future<void> getUsers() async {
+  Future<void> getStudents() async {
     isLoading.value = true;
     error.value = '';
 
     try {
-      final result = await controller.getUsers();
+      final result = await controller.getStudents();
       state.value = result;
     } catch (e) {
       if (kDebugMode) {
@@ -37,6 +38,22 @@ class UserStore {
 
     try {
       await controller.createUser(user);
+    } catch (e) {
+      if (kDebugMode) {
+        print('error: $e');
+      }
+      error.value = e.toString();
+    }
+
+    isLoading.value = false;
+  }
+
+  Future<void> createStudent(StudentModel user) async {
+    isLoading.value = true;
+    error.value = '';
+
+    try {
+      await controller.createStudent(user);
     } catch (e) {
       if (kDebugMode) {
         print('error: $e');
@@ -64,13 +81,13 @@ class UserStore {
     isLoading.value = false;
   }
 
-  Future<void> updateUser(UserModel user) async {
+  Future<void> updateUser(StudentModel user) async {
     isLoading.value = true;
     error.value = '';
 
     try {
       await controller.updateUser(user);
-      await getUsers();
+      await getStudents();
     } catch (e) {
       if (kDebugMode) {
         print('error: $e');
@@ -87,7 +104,7 @@ class UserStore {
 
     try {
       await controller.deleteUser(id);
-      await getUsers();
+      await getStudents();
     } catch (e) {
       if (kDebugMode) {
         print('error: $e');
@@ -98,7 +115,7 @@ class UserStore {
     isLoading.value = false;
   }
 
-  Future<UserModel?> getUserById(int id) async {
+  Future<StudentModel?> getUserById(int id) async {
     isLoading.value = true;
     error.value = '';
 

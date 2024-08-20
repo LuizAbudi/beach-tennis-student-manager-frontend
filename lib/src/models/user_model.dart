@@ -7,11 +7,10 @@ String userToJson(UserModel data) => json.encode(data.toJson());
 class UserModel {
   int? id;
   String? name;
-  String email;
+  String? email;
   String? password;
   String? userType;
-  String? level;
-  int? teacherId;
+  bool? status;
 
   UserModel({
     this.id,
@@ -19,8 +18,7 @@ class UserModel {
     required this.email,
     this.password,
     this.userType,
-    this.level,
-    this.teacherId,
+    this.status,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -29,8 +27,7 @@ class UserModel {
         email: json["email"],
         password: json["password"],
         userType: json["userType"],
-        level: json["level"],
-        teacherId: json["teacherId"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() {
@@ -43,20 +40,12 @@ class UserModel {
       data["name"] = name;
     }
 
-    if (level != null) {
-      data["level"] = level;
-    }
-
     if (userType != null) {
       data["userType"] = userType;
     }
 
     if (id != null) {
       data["id"] = id;
-    }
-
-    if (teacherId != null) {
-      data["teacherId"] = teacherId;
     }
 
     return data;
