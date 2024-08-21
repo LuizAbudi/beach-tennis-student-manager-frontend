@@ -126,7 +126,7 @@ class _UserFormState extends State<UserForm> {
       backgroundColor: const Color.fromRGBO(246, 248, 249, 1),
       appBar: AppBar(
         title: const Text('Cadastro de aluno'),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromRGBO(246, 248, 249, 1),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
