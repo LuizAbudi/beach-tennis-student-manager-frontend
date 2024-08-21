@@ -104,7 +104,7 @@ class UserStore {
 
     try {
       await controller.deleteUser(id);
-      await getStudents();
+      // await getStudents();
     } catch (e) {
       if (kDebugMode) {
         print('error: $e');

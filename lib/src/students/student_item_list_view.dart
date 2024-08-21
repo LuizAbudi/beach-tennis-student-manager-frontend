@@ -5,6 +5,7 @@ import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/user_stores.dart';
+import 'package:mobile/src/students/student_details_view.dart';
 import 'package:mobile/src/students/student_form.dart';
 import 'package:mobile/src/widgets/custom_button.dart';
 import 'package:mobile/src/widgets/student_card.dart';
@@ -65,7 +66,16 @@ class _UserItemListViewState extends State<UserItemListView> {
                   final student = store.state.value[index];
 
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserItemDetailsView(
+                            student: student,
+                          ),
+                        ),
+                      );
+                    },
                     child: StudentCard(
                       name: student.user.name!,
                       plan: student.level!,

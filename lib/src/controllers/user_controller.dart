@@ -30,7 +30,6 @@ class UserController implements IUserController {
 
       body.map((item) {
         final StudentModel user = StudentModel.fromJson(item);
-        print(user);
         users.add(user);
       }).toList();
 
@@ -103,7 +102,7 @@ class UserController implements IUserController {
 
     if (response.statusCode != 200) {
       final responseData = jsonDecode(response.body);
-      throw responseData['error']['message'];
+      throw responseData['message'];
     }
   }
 
