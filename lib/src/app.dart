@@ -72,7 +72,9 @@ class _MyAppState extends State<MyApp> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
               body: Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: Color.fromRGBO(255, 98, 62, 1),
+                ),
               ),
             );
           } else {

@@ -52,7 +52,10 @@ class _MyActivityItemListViewState extends State<MyActivityItemListView> {
             Listenable.merge([store.isLoading, store.error, store.state]),
         builder: (context, child) {
           if (store.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(
+              color: Color.fromRGBO(255, 98, 62, 1),
+            ));
           }
 
           return ListView.separated(

@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/payment_controller.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
-import 'package:mobile/src/models/student_model.dart';
+import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/payment_stores.dart';
 import 'package:mobile/src/stores/user_stores.dart';
-import 'package:mobile/src/widgets/custom_button.dart';
 
-class UserItemDetailsView extends StatefulWidget {
-  final StudentModel student;
-
-  const UserItemDetailsView({super.key, required this.student});
+class MyProfileView extends StatefulWidget {
+  const MyProfileView({super.key});
 
   @override
-  State<UserItemDetailsView> createState() => _UserItemDetailsViewState();
+  State<MyProfileView> createState() => _MyProfileViewState();
 }
 
-class _UserItemDetailsViewState extends State<UserItemDetailsView> {
+class _MyProfileViewState extends State<MyProfileView> {
   final UserStore store = UserStore(
     controller: UserController(
       client: HttpClient(),
@@ -29,114 +26,94 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
     ),
   );
 
-  void _handleDeleteStudent() async {
-    await store.deleteUser(widget.student.id!);
-
-    if (mounted && store.error.value.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(store.error.value),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-
-    if (mounted && store.error.value.isEmpty) {
-      Navigator.pop(context);
-    }
-  }
+  UserModel? myUser;
 
   @override
   void initState() {
     super.initState();
+    _loadUser();
+    _loadPayments();
+  }
 
-    paymentStore.getStudentPayments(widget.student.id!);
+  Future<void> _loadPayments() async {
+    if (myUser != null) await paymentStore.getStudentPayments(myUser!.id!);
+  }
+
+  Future<void> _loadUser() async {
+    myUser = await store.getMe();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Detalhes do Usuário"),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipOval(
-              child: Image.network(
-                "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
+    return AnimatedBuilder(
+        animation: Listenable.merge([
+          store.isLoading,
+          paymentStore.isLoading,
+          store.error,
+        ]),
+        builder: (context, child) {
+          if (store.error.value.isNotEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(store.error.value),
+                backgroundColor: Colors.red,
               ),
-            ),
-            const SizedBox(height: 16.0),
-            Text(
-              widget.student.user.name ?? 'Nome não disponível',
-              style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
+            );
+          }
+
+          if (store.isLoading.value || paymentStore.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Color.fromRGBO(255, 98, 62, 1),
               ),
-            ),
-            const SizedBox(height: 4.0),
-            Text(
-              "Nível ${widget.student.level ?? 'não disponível'} / Básico",
-              style: const TextStyle(
-                fontSize: 14.0,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CustomButton(
-                  text: "Remover",
-                  icon: Icons.delete_outline,
-                  onPressed: _handleDeleteStudent,
-                  color: const Color.fromRGBO(235, 237, 242, 1),
-                  height: 40,
-                  textSize: 14,
-                  withShadow: false,
-                  textColor: Colors.black54,
-                  iconColor: Colors.black54,
+                ClipOval(
+                  child: Image.network(
+                    "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                const SizedBox(width: 16.0),
-                CustomButton(
-                  text: "Pagamento",
-                  onPressed: () {},
-                  icon: Icons.payment_outlined,
-                  height: 40,
-                  textSize: 14,
-                  withShadow: false,
-                  // width: ,
+                const SizedBox(height: 16.0),
+                Text(
+                  myUser!.name ?? 'Nome não disponível',
+                  style: const TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+                const SizedBox(height: 4.0),
+                Text(
+                  "Email: ${myUser!.email ?? 'não disponível'}",
+                  style: const TextStyle(
+                    fontSize: 14.0,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Histórico de pagamentos",
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                _buildPaymentHistory(),
               ],
             ),
-            const SizedBox(height: 32.0),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Histórico de pagamentos",
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            _buildPaymentHistory(),
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 
   Widget _buildPaymentHistory() {

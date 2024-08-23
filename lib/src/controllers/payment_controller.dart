@@ -21,17 +21,7 @@ class PaymentController implements IPaymentController {
 
     if (response.statusCode == 200) {
       final List<PaymentModel> payments = [];
-
-      final responseMock = jsonEncode([
-        {"id": 1, "paymentStatus": "paid", "paymentDate": "2024-08-20"},
-        {"id": 2, "paymentStatus": "paid", "paymentDate": "2024-07-20"},
-        {"id": 3, "paymentStatus": "pendent", "paymentDate": "2024-07-20"},
-        {"id": 4, "paymentStatus": "pendent", "paymentDate": "2024-07-20"},
-        {"id": 5, "paymentStatus": "paid", "paymentDate": "2024-07-20"},
-        {"id": 6, "paymentStatus": "paid", "paymentDate": "2024-07-20"},
-      ]);
-
-      final body = jsonDecode(responseMock);
+      final body = jsonDecode(response.body);
 
       body.map((item) {
         final PaymentModel payment = PaymentModel.fromJson(item);

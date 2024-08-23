@@ -28,19 +28,20 @@ class _UserItemListViewState extends State<UserItemListView> {
 
   var isLoaded = false;
   UserModel? loggedUserModel;
-  final loggedUser = localStorage.getItem('token');
+  final token = localStorage.getItem('token');
 
   @override
   void initState() {
     super.initState();
 
-    if (loggedUser != null) {
-      final Map<String, dynamic> decodedToken = JwtDecoder.decode(loggedUser!);
+    if (token != null) {
+      final Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
 
       loggedUserModel = UserModel(
         id: decodedToken['id'],
         name: decodedToken['name'],
         email: decodedToken['email'],
+        userType: decodedToken['userType'],
       );
     }
 
@@ -58,7 +59,11 @@ class _UserItemListViewState extends State<UserItemListView> {
                 Listenable.merge([store.isLoading, store.error, store.state]),
             builder: (context, child) {
               if (store.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Color.fromRGBO(255, 98, 62, 1),
+                  ),
+                );
               }
 
               return ListView.separated(
@@ -67,14 +72,23 @@ class _UserItemListViewState extends State<UserItemListView> {
 
                   return GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserItemDetailsView(
-                            student: student,
+                      if (loggedUserModel?.userType == "teacher") {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UserItemDetailsView(
+                              student: student,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'Somente professores podem acessar esta funcionalidade.'),
+                          ),
+                        );
+                      }
                     },
                     child: StudentCard(
                       name: student.user.name!,
@@ -97,23 +111,25 @@ class _UserItemListViewState extends State<UserItemListView> {
               );
             },
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: CustomButton(
-                text: "Cadastrar aluno",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UserForm(),
+          loggedUserModel?.userType == "teacher"
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: CustomButton(
+                      text: "Cadastrar aluno",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UserForm(),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
-          ),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );

@@ -132,4 +132,23 @@ class UserStore {
 
     return null;
   }
+
+  Future<UserModel?> getMe() async {
+    isLoading.value = true;
+    error.value = '';
+
+    try {
+      final user = await controller.getMe();
+      return user;
+    } catch (e) {
+      if (kDebugMode) {
+        print('error: $e');
+      }
+      error.value = e.toString();
+    }
+
+    isLoading.value = false;
+
+    return null;
+  }
 }

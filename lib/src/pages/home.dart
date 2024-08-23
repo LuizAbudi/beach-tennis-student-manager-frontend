@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/src/activities/activity_item_list_view.dart';
-import 'package:mobile/src/activities/my_activity_item_list_view.dart';
 import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/pages/login.dart';
+import 'package:mobile/src/pages/my_profile.dart';
 import 'package:mobile/src/students/student_item_list_view.dart';
 
 class Home extends StatefulWidget {
@@ -22,18 +22,18 @@ class _HomeState extends State<Home> {
   final tabs = [
     const UserItemListView(),
     const ActivityItemListView(),
-    const MyActivityItemListView(),
+    const MyProfileView(),
   ];
 
   UserModel? loggedUserModel;
-  final loggedUser = localStorage.getItem('token');
+  final token = localStorage.getItem('token');
 
   @override
   void initState() {
     super.initState();
 
-    if (loggedUser != null) {
-      final Map<String, dynamic> decodedToken = JwtDecoder.decode(loggedUser!);
+    if (token != null) {
+      final Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
 
       loggedUserModel = UserModel(
         id: decodedToken['id'],

@@ -21,6 +21,7 @@ class PaymentStore {
     try {
       final result = await controller.getStudentPayments(id);
       state.value = result;
+      print(result);
     } catch (e) {
       if (kDebugMode) {
         print('error: $e');

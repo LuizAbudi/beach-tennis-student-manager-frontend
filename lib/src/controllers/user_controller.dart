@@ -12,6 +12,7 @@ abstract class IUserController {
   Future<void> updateUser(StudentModel user);
   Future<void> deleteUser(int id);
   Future<StudentModel?> getUserById(int id);
+  Future<UserModel> getMe();
 }
 
 class UserController implements IUserController {
@@ -125,5 +126,13 @@ class UserController implements IUserController {
     }
 
     return null;
+  }
+
+  @override
+  Future<UserModel> getMe() async {
+    final response = await client.get(url: "$baseUrl/me");
+    final body = jsonDecode(response.body);
+    final UserModel user = UserModel.fromJson(body);
+    return user;
   }
 }
