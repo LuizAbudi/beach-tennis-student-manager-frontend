@@ -8,6 +8,7 @@ class UserStore {
   final IUserController controller;
 
   final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> isSuccess = ValueNotifier<bool>(false);
 
   final ValueNotifier<List<StudentModel>> state =
       ValueNotifier<List<StudentModel>>([]);
@@ -48,17 +49,20 @@ class UserStore {
     isLoading.value = false;
   }
 
-  Future<void> createStudent(StudentModel user) async {
+  Future<void> createStudent(UserModel user) async {
     isLoading.value = true;
     error.value = '';
+    isSuccess.value = false;
 
     try {
       await controller.createStudent(user);
+      isSuccess.value = true;
     } catch (e) {
       if (kDebugMode) {
         print('error: $e');
       }
       error.value = e.toString();
+      isSuccess.value = false;
     }
 
     isLoading.value = false;
@@ -81,7 +85,7 @@ class UserStore {
     isLoading.value = false;
   }
 
-  Future<void> updateUser(StudentModel user) async {
+  Future<void> updateUser(UserModel user) async {
     isLoading.value = true;
     error.value = '';
 
@@ -145,10 +149,9 @@ class UserStore {
         print('error: $e');
       }
       error.value = e.toString();
+      return null;
+    } finally {
+      isLoading.value = false;
     }
-
-    isLoading.value = false;
-
-    return null;
   }
 }

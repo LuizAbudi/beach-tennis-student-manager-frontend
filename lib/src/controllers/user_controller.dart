@@ -7,9 +7,9 @@ import 'package:mobile/src/services/http_client.dart';
 abstract class IUserController {
   Future<List<StudentModel>> getStudents();
   Future<void> createUser(UserModel user);
-  Future<void> createStudent(StudentModel user);
+  Future<void> createStudent(UserModel user);
   Future<String> login(UserModel user);
-  Future<void> updateUser(StudentModel user);
+  Future<void> updateUser(UserModel user);
   Future<void> deleteUser(int id);
   Future<StudentModel?> getUserById(int id);
   Future<UserModel> getMe();
@@ -54,9 +54,9 @@ class UserController implements IUserController {
   }
 
   @override
-  Future<void> createStudent(StudentModel user) async {
+  Future<void> createStudent(UserModel user) async {
     final Map<String, dynamic> data = user.toJson();
-
+    print(data);
     const registerUrl = "/api/register";
     final response = await client.post(url: registerUrl, body: data);
 
@@ -70,6 +70,8 @@ class UserController implements IUserController {
   Future<String> login(UserModel user) async {
     final Map<String, dynamic> data = user.toJson();
     const loginUrl = '/api/login';
+
+    print(data);
 
     final response = await client.post(url: loginUrl, body: data);
 
@@ -86,7 +88,7 @@ class UserController implements IUserController {
   }
 
   @override
-  Future<void> updateUser(StudentModel user) async {
+  Future<void> updateUser(UserModel user) async {
     final Map<String, dynamic> data = user.toJson();
 
     final response = await client.put(url: baseUrl, body: data);

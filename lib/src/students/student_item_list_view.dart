@@ -81,13 +81,6 @@ class _UserItemListViewState extends State<UserItemListView> {
                             ),
                           ),
                         );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                                'Somente professores podem acessar esta funcionalidade.'),
-                          ),
-                        );
                       }
                     },
                     child: StudentCard(

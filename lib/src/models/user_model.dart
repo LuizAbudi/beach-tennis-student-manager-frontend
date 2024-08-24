@@ -11,6 +11,8 @@ class UserModel {
   String? password;
   String? userType;
   bool? status;
+  String? level;
+  int? teacherId;
 
   UserModel({
     this.id,
@@ -19,6 +21,8 @@ class UserModel {
     this.password,
     this.userType,
     this.status,
+    this.level,
+    this.teacherId,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -28,6 +32,8 @@ class UserModel {
         password: json["password"],
         userType: json["userType"],
         status: json["status"],
+        level: json["level"],
+        teacherId: json["teacherId"],
       );
 
   Map<String, dynamic> toJson() {
@@ -36,17 +42,11 @@ class UserModel {
       "password": password,
     };
 
-    if (name != null) {
-      data["name"] = name;
-    }
-
-    if (userType != null) {
-      data["userType"] = userType;
-    }
-
-    if (id != null) {
-      data["id"] = id;
-    }
+    if (level != null) data["level"] = level;
+    if (teacherId != null) data["teacherId"] = teacherId;
+    if (name != null) data["name"] = name;
+    if (userType != null) data["userType"] = userType;
+    if (id != null) data["id"] = id;
 
     return data;
   }

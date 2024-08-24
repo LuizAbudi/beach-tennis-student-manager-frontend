@@ -31,16 +31,14 @@ class _MyProfileViewState extends State<MyProfileView> {
   @override
   void initState() {
     super.initState();
-    _loadUser();
-    _loadPayments();
+    _loadProfileData();
   }
 
-  Future<void> _loadPayments() async {
-    if (myUser != null) await paymentStore.getStudentPayments(myUser!.id!);
-  }
-
-  Future<void> _loadUser() async {
+  Future<void> _loadProfileData() async {
     myUser = await store.getMe();
+    if (myUser!.userType == "student") {
+      await paymentStore.getStudentPayments(myUser!.id!);
+    }
   }
 
   @override
@@ -48,7 +46,6 @@ class _MyProfileViewState extends State<MyProfileView> {
     return AnimatedBuilder(
         animation: Listenable.merge([
           store.isLoading,
-          paymentStore.isLoading,
           store.error,
         ]),
         builder: (context, child) {
@@ -61,7 +58,7 @@ class _MyProfileViewState extends State<MyProfileView> {
             );
           }
 
-          if (store.isLoading.value || paymentStore.isLoading.value) {
+          if (store.isLoading.value) {
             return const Center(
               child: CircularProgressIndicator(
                 color: Color.fromRGBO(255, 98, 62, 1),
@@ -71,46 +68,50 @@ class _MyProfileViewState extends State<MyProfileView> {
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ClipOval(
-                  child: Image.network(
-                    "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
+            child: Align(
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  ClipOval(
+                    child: Image.network(
+                      "https://static.vecteezy.com/system/resources/previews/009/292/244/original/default-avatar-icon-of-social-media-user-vector.jpg",
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16.0),
-                Text(
-                  myUser!.name ?? 'Nome não disponível',
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4.0),
-                Text(
-                  "Email: ${myUser!.email ?? 'não disponível'}",
-                  style: const TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.grey,
-                  ),
-                ),
-                const SizedBox(height: 16.0),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Histórico de pagamentos",
-                    style: TextStyle(
+                  const SizedBox(height: 16.0),
+                  Text(
+                    myUser!.name ?? 'Nome não disponível',
+                    style: const TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                _buildPaymentHistory(),
-              ],
+                  const SizedBox(height: 4.0),
+                  Text(
+                    "Email: ${myUser!.email ?? 'não disponível'}",
+                    style: const TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  if (myUser!.userType == "student") ...[
+                    const SizedBox(height: 60.0),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Histórico de pagamentos",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    _buildPaymentHistory()
+                  ],
+                ],
+              ),
             ),
           );
         });
@@ -118,7 +119,8 @@ class _MyProfileViewState extends State<MyProfileView> {
 
   Widget _buildPaymentHistory() {
     return AnimatedBuilder(
-      animation: paymentStore.isLoading,
+      animation: Listenable.merge(
+          [paymentStore.error, paymentStore.isLoading, paymentStore.isLoading]),
       builder: (context, child) {
         if (paymentStore.isLoading.value) {
           return const Center(
@@ -137,7 +139,7 @@ class _MyProfileViewState extends State<MyProfileView> {
               ),
               SizedBox(height: 8.0),
               Text(
-                "Ainda não tem pagamentos",
+                "Você ainda não fez pagamentos",
                 style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.grey,

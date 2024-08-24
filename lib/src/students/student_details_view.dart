@@ -57,7 +57,7 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Detalhes do Usuário"),
+        title: const Text("Detalhes do aluno"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -84,6 +84,14 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
               style: const TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 4.0),
+            Text(
+              widget.student.user.email ?? 'Nome não disponível',
+              style: const TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.normal,
               ),
             ),
             const SizedBox(height: 4.0),
@@ -189,11 +197,18 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
                     ],
                   ),
                   child: ListTile(
-                    leading: Icon(
-                      payment.paymentStatus == "paid"
-                          ? Icons.payment
-                          : Icons.pending,
-                      color: Colors.black54,
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        payment.paymentStatus == "paid"
+                            ? Icons.payment
+                            : Icons.pending,
+                        color: Colors.black87,
+                      ),
                     ),
                     title: Text(
                       "Data: ${payment.paymentDate}",
