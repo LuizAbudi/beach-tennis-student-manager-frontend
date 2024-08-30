@@ -29,6 +29,8 @@ class UserController implements IUserController {
       final List<StudentModel> users = [];
       final body = jsonDecode(response.body);
 
+      print(body);
+
       body.map((item) {
         final StudentModel user = StudentModel.fromJson(item);
         users.add(user);

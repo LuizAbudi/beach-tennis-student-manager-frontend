@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:mobile/src/activities/activity_item_list_view.dart';
+import 'package:mobile/src/controllers/classes_controller.dart';
 import 'package:mobile/src/models/user_model.dart';
+import 'package:mobile/src/classes/classes_item_list_view.dart';
 import 'package:mobile/src/pages/login.dart';
 import 'package:mobile/src/pages/my_profile.dart';
+import 'package:mobile/src/services/http_client.dart';
+import 'package:mobile/src/stores/classes_stores.dart';
 import 'package:mobile/src/students/student_item_list_view.dart';
 
 class Home extends StatefulWidget {
-  const Home({
-    super.key,
-  });
+  final int initialIndex;
+
+  const Home({super.key, this.initialIndex = 0});
 
   @override
   State<Home> createState() => _HomeState();
@@ -19,11 +22,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
 
-  final tabs = [
-    const UserItemListView(),
-    const ActivityItemListView(),
-    const MyProfileView(),
-  ];
+  late ClassStore classStore;
+  late List<Widget> tabs;
 
   UserModel? loggedUserModel;
   final token = localStorage.getItem('token');
@@ -31,6 +31,20 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
+    _currentIndex = widget.initialIndex; // Usar o índice inicial passado
+
+    classStore = ClassStore(
+      controller: ClassController(
+        client: HttpClient(),
+      ),
+    );
+
+    tabs = [
+      const UserItemListView(),
+      const ClassesListView(),
+      const MyProfileView(),
+    ];
 
     if (token != null) {
       final Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
@@ -107,7 +121,7 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.white,
         items: List.generate(3, (index) {
           return BottomNavigationBarItem(
-            icon: _buildIcon(index, context),
+            icon: _buildIcon(index),
             label: _getLabel(index),
           );
         }),
@@ -120,7 +134,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildIcon(int index, BuildContext context) {
+  Widget _buildIcon(int index) {
     final bool isSelected = _currentIndex == index;
 
     return Stack(
@@ -151,7 +165,7 @@ class _HomeState extends State<Home> {
       case 0:
         return Icons.people;
       case 1:
-        return Icons.assignment;
+        return Icons.class_;
       case 2:
       default:
         return Icons.person;

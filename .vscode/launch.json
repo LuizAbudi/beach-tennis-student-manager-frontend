@@ -1,0 +1,43 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "beach-tennis-student-manager-frontend",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "deviceId": "chrome",
+            "args": [
+              "--web-browser-flag",
+              "--disable-web-security"
+            ]
+        },
+        {
+            "name": "beach-tennis-student-manager-frontend (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "program": "lib/main.dart",
+            "deviceId": "chrome",
+            "args": [
+              "--web-browser-flag",
+              "--disable-web-security"
+            ]
+        },
+        {
+            "name": "beach-tennis-student-manager-frontend (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "program": "lib/main.dart",
+            "deviceId": "chrome",
+            "args": [
+              "--web-browser-flag",
+              "--disable-web-security"
+            ]
+        }
+    ]
+}
