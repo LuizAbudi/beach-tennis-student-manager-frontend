@@ -52,6 +52,7 @@ class _UserFormState extends State<UserForm> {
         id: decodedToken['id'],
         name: decodedToken['name'],
         email: decodedToken['email'],
+        teacherId: decodedToken['teacherId'],
       );
     }
 
@@ -96,7 +97,7 @@ class _UserFormState extends State<UserForm> {
             name: name,
             userType: "student",
             password: "1234abc",
-            teacherId: loggedUserModel?.id,
+            teacherId: loggedUserModel?.teacherId,
           );
 
     if (widget.id != null) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/src/classes/classes_detail_view.dart';
 import 'package:mobile/src/classes/classes_form.dart';
 import 'package:mobile/src/controllers/classes_controller.dart';
 import 'package:mobile/src/services/http_client.dart';
@@ -104,6 +105,20 @@ class _ClassesListViewState extends State<ClassesListView> {
                               'Horário: ${classModel.startTime} - ${classModel.endTime}'),
                           trailing:
                               Text('Professor ID: ${classModel.teacherId}'),
+                          onTap: () {
+                            if (classModel.id != null) {  // Verifica se o ID não é null
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ClassesDetailsView(
+                                    classId: classModel.id!,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              // Trate o caso onde classModel.id é null, se necessário.
+                            }
+                          },
                         ),
                       );
                     },
