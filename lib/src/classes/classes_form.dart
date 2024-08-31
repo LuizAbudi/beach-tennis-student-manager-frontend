@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:mobile/src/controllers/classes_controller.dart';
+import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/models/classes_model.dart';
 import 'package:mobile/src/pages/home.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/classes_stores.dart';
+import 'package:mobile/src/stores/user_stores.dart';
 import 'package:mobile/src/widgets/custom_button.dart';
 import 'package:mobile/src/widgets/custom_input.dart';
 
@@ -23,11 +25,19 @@ class _ClassFormState extends State<ClassForm> {
     ),
   );
 
+  final UserStore userStore = UserStore(
+    controller: UserController(
+      client: HttpClient(),
+    ),
+  );
+  
   late TextEditingController startTimeController;
   late TextEditingController endTimeController;
 
   int? teacherId; // Variável para armazenar o ID do usuário logado
   int? selectedDay; // Variável para armazenar o dia selecionado
+
+  List<int> selectedStudentIds = []; // Lista para armazenar IDs dos alunos selecionados
 
   @override
   void initState() {
@@ -36,6 +46,7 @@ class _ClassFormState extends State<ClassForm> {
     endTimeController = TextEditingController();
 
     _getLoggedUserId(); // Obtém o ID do usuário logado
+    userStore.getStudents(); // Carrega os alunos disponíveis
   }
 
   Future<void> _getLoggedUserId() async {
@@ -82,8 +93,8 @@ class _ClassFormState extends State<ClassForm> {
       classDay: selectedDay!,
       startTime: startTime,
       endTime: endTime,
-      teacherId: teacherId!, // Usa o ID do usuário logado
-      studentIds: [],
+      teacherId: teacherId!,
+      studentIds: selectedStudentIds, // Inclui os IDs dos alunos selecionados
     );
 
     await store.createClass(newClassModel);
@@ -141,7 +152,7 @@ class _ClassFormState extends State<ClassForm> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: Listenable.merge([store.isLoading, store.isSuccess, store.error]),
+      animation: Listenable.merge([store.isLoading, store.isSuccess, store.error, userStore.isLoading]),
       builder: (context, child) {
         return Scaffold(
           appBar: AppBar(
@@ -155,10 +166,10 @@ class _ClassFormState extends State<ClassForm> {
                   value: selectedDay,
                   decoration: InputDecoration(
                     labelText: 'Dia da Aula',
-                    prefixIcon: Icon(Icons.calendar_today), // Corrigido
+                    prefixIcon: Icon(Icons.calendar_today),
                     border: OutlineInputBorder(),
                   ),
-                  items: [
+                  items: const [
                     DropdownMenuItem(value: 1, child: Text('Domingo')),
                     DropdownMenuItem(value: 2, child: Text('Segunda-feira')),
                     DropdownMenuItem(value: 3, child: Text('Terça-feira')),
@@ -172,7 +183,7 @@ class _ClassFormState extends State<ClassForm> {
                       selectedDay = value;
                     });
                   },
-                  hint: Text('Selecione o dia da semana'),
+                  hint: const Text('Selecione o dia da semana'),
                 ),
                 const SizedBox(height: 16),
                 CustomInput(
@@ -186,6 +197,34 @@ class _ClassFormState extends State<ClassForm> {
                   controller: endTimeController,
                   prefixIcon: Icons.access_time_filled,
                   label: "Horário de Término",
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  "Selecione os Alunos",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: userStore.isLoading.value
+                      ? CircularProgressIndicator()
+                      : ListView(
+                          children: userStore.state.value.map((student) {
+                            return CheckboxListTile(
+                              title: Text(student.user.name ?? 'Nome não disponível'), // Valor padrão se o nome for nulo
+                              value: selectedStudentIds.contains(student.id ?? -1), // Valor padrão se o ID for nulo
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  final studentId = student.id ?? -1; // Valor padrão se o ID for nulo
+                                  if (value == true) {
+                                    selectedStudentIds.add(studentId);
+                                  } else {
+                                    selectedStudentIds.remove(studentId);
+                                  }
+                                });
+                              },
+                            );
+                          }).toList(),
+                        ),
                 ),
                 const SizedBox(height: 50),
                 CustomButton(

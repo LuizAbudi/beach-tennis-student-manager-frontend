@@ -13,9 +13,11 @@ class ClassStore {
 
   final ValueNotifier<String> error = ValueNotifier<String>("");
 
+  final ValueNotifier<ClassModel?> selectedClass = ValueNotifier<ClassModel?>(null); // Novo Notifier
+
   ClassStore({required this.controller});
 
-  Future<void> getClasses() async {;
+  Future<void> getClasses() async {
     isLoading.value = true;
     error.value = '';
 
@@ -47,6 +49,24 @@ class ClassStore {
       }
       error.value = e.toString();
       isSuccess.value = false;
+    }
+
+    isLoading.value = false;
+  }
+
+  Future<void> getClassById(int id) async {
+    isLoading.value = true;
+    error.value = '';
+
+    try {
+      final result = await controller.getClassById(id);
+
+      selectedClass.value = result;
+    } catch (e) {
+      if (kDebugMode) {
+        print('error: $e');
+      }
+      error.value = e.toString();
     }
 
     isLoading.value = false;
