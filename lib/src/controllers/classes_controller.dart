@@ -5,7 +5,7 @@ import 'package:mobile/src/services/http_client.dart';
 abstract class IClassController {
   Future<List<ClassModel>> getClasses();
   Future<void> createClass(ClassModel classModel);
-  Future<ClassModel?> getClassById(int id); // Novo método
+  Future<ClassModel?> getClassById(int id);
 }
 
 class ClassController implements IClassController {
@@ -16,7 +16,7 @@ class ClassController implements IClassController {
 
   @override
   Future<List<ClassModel>> getClasses() async {
-    final response = await client.get(url: "$baseUrl");
+    final response = await client.get(url: baseUrl);
 
     if (response.statusCode == 200) {
       final List<ClassModel> classes = [];
@@ -37,7 +37,8 @@ class ClassController implements IClassController {
   Future<void> createClass(ClassModel classModel) async {
     final Map<String, dynamic> data = classModel.toJson();
 
-    final response = await client.post(url: "$baseUrl/create-class", body: data);
+    final response =
+        await client.post(url: "$baseUrl/create-class", body: data);
 
     if (response.statusCode != 201) {
       final responseData = jsonDecode(response.body);

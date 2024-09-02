@@ -83,7 +83,7 @@ class _ClassesListViewState extends State<ClassesListView> {
                     itemCount: store.state.value.length,
                     itemBuilder: (context, index) {
                       final classModel = store.state.value[index];
-                      final dayOfWeek = classModel.classDay ?? 0; // Usa 0 como valor padrão
+                      final dayOfWeek = classModel.classDay ?? 0;
                       return Container(
                         margin: const EdgeInsets.symmetric(vertical: 4.0),
                         decoration: BoxDecoration(
@@ -100,13 +100,13 @@ class _ClassesListViewState extends State<ClassesListView> {
                           ],
                         ),
                         child: ListTile(
+                          leading: const Icon(Icons.sports_outlined),
                           title: Text('Dia da aula: ${_dayOfWeek(dayOfWeek)}'),
                           subtitle: Text(
                               'Horário: ${classModel.startTime} - ${classModel.endTime}'),
-                          trailing:
-                              Text('Professor ID: ${classModel.teacherId}'),
+                          trailing: Text('Prof. ${classModel.teacher!.name}'),
                           onTap: () {
-                            if (classModel.id != null) {  // Verifica se o ID não é null
+                            if (classModel.id != null) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -115,8 +115,6 @@ class _ClassesListViewState extends State<ClassesListView> {
                                   ),
                                 ),
                               );
-                            } else {
-                              // Trate o caso onde classModel.id é null, se necessário.
                             }
                           },
                         ),
@@ -137,7 +135,8 @@ class _ClassesListViewState extends State<ClassesListView> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ClassForm(), // Tela do formulário de classe
+                      builder: (context) =>
+                          const ClassForm(), // Tela do formulário de classe
                     ),
                   );
                 },

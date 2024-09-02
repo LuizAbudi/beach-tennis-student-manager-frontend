@@ -13,7 +13,8 @@ class ClassStore {
 
   final ValueNotifier<String> error = ValueNotifier<String>("");
 
-  final ValueNotifier<ClassModel?> selectedClass = ValueNotifier<ClassModel?>(null); // Novo Notifier
+  final ValueNotifier<ClassModel?> selectedClass =
+      ValueNotifier<ClassModel?>(null);
 
   ClassStore({required this.controller});
 

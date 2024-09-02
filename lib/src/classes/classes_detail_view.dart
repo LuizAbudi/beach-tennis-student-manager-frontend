@@ -21,7 +21,7 @@ class _ClassesDetailsViewState extends State<ClassesDetailsView> {
     ),
   );
 
-  ClassModel? classModel; // Variável para armazenar os detalhes da aula
+  ClassModel? classModel;
 
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _ClassesDetailsViewState extends State<ClassesDetailsView> {
   Future<void> _loadClassDetails() async {
     await store.getClassById(widget.classId);
     setState(() {
-      classModel = store.selectedClass.value; // Armazena os detalhes na variável
+      classModel = store.selectedClass.value;
     });
   }
 
@@ -70,7 +70,7 @@ class _ClassesDetailsViewState extends State<ClassesDetailsView> {
         ),
       ),
       body: classModel == null
-          ? const Center(child: CircularProgressIndicator()) // Exibe um indicador de carregamento enquanto a aula é carregada
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -93,7 +93,7 @@ class _ClassesDetailsViewState extends State<ClassesDetailsView> {
                   ),
                   const SizedBox(height: 8.0),
                   Text(
-                    "Professor ID: ${classModel!.teacherId ?? 'N/A'}",
+                    "Professor: ${classModel!.teacher!.name ?? 'N/A'}",
                     style: const TextStyle(
                       fontSize: 16.0,
                     ),
@@ -105,9 +105,7 @@ class _ClassesDetailsViewState extends State<ClassesDetailsView> {
                       const SizedBox(width: 16.0),
                       CustomButton(
                         text: "Editar",
-                        onPressed: () {
-                          // Lógica para editar a aula, caso necessário
-                        },
+                        onPressed: () {},
                         icon: Icons.edit,
                         height: 40,
                         textSize: 14,

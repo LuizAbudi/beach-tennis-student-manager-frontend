@@ -28,12 +28,12 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["id"],
         name: json["name"],
-        email: json["email"],
-        password: json["password"],
-        userType: json["userType"],
-        status: json["status"],
-        level: json["level"],
-        teacherId: json["teacherId"],
+        email: json["email"] ?? "",
+        password: json["password"] ?? "",
+        userType: json["userType"] ?? "",
+        status: json["status"] ?? "",
+        level: json["level"] ?? "",
+        teacherId: json["teacherId"] ?? 0,
       );
 
   Map<String, dynamic> toJson() {

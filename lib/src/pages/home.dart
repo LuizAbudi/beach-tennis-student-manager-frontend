@@ -32,7 +32,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
 
-    _currentIndex = widget.initialIndex; // Usar o índice inicial passado
+    _currentIndex = widget.initialIndex;
 
     classStore = ClassStore(
       controller: ClassController(
@@ -165,7 +165,7 @@ class _HomeState extends State<Home> {
       case 0:
         return Icons.people;
       case 1:
-        return Icons.class_;
+        return Icons.sports_outlined;
       case 2:
       default:
         return Icons.person;

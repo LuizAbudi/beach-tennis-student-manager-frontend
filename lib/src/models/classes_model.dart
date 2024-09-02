@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-List<ClassModel> classModelsFromJson(String str) => List<ClassModel>.from(
-    json.decode(str).map((x) => ClassModel.fromJson(x))
-);
+import 'package:mobile/src/models/user_model.dart';
 
-String classModelsToJson(List<ClassModel> data) => json.encode(
-    List<dynamic>.from(data.map((x) => x.toJson()))
-);
+List<ClassModel> classModelsFromJson(String str) =>
+    List<ClassModel>.from(json.decode(str).map((x) => ClassModel.fromJson(x)));
+
+String classModelsToJson(List<ClassModel> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
 class ClassModel {
   int? id;
   int? classDay;
@@ -14,6 +15,7 @@ class ClassModel {
   String? endTime;
   int? teacherId;
   List<int>? studentIds;
+  UserModel? teacher;
 
   ClassModel({
     this.id,
@@ -22,6 +24,7 @@ class ClassModel {
     required this.endTime,
     this.teacherId,
     this.studentIds,
+    this.teacher,
   });
 
   factory ClassModel.fromJson(Map<String, dynamic> json) => ClassModel(
@@ -30,6 +33,9 @@ class ClassModel {
         startTime: json["startTime"],
         endTime: json["endTime"],
         teacherId: json["teacherId"],
+        teacher: json["teacher"] != null
+            ? UserModel.fromJson(json['teacher']['user'])
+            : null,
         studentIds: json["studentIds"] == null
             ? null
             : List<int>.from(json["studentIds"].map((x) => x)),

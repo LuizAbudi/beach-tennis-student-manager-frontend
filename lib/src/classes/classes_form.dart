@@ -30,14 +30,15 @@ class _ClassFormState extends State<ClassForm> {
       client: HttpClient(),
     ),
   );
-  
+
   late TextEditingController startTimeController;
   late TextEditingController endTimeController;
 
   int? teacherId; // Variável para armazenar o ID do usuário logado
   int? selectedDay; // Variável para armazenar o dia selecionado
 
-  List<int> selectedStudentIds = []; // Lista para armazenar IDs dos alunos selecionados
+  List<int> selectedStudentIds =
+      []; // Lista para armazenar IDs dos alunos selecionados
 
   @override
   void initState() {
@@ -74,7 +75,10 @@ class _ClassFormState extends State<ClassForm> {
     final startTime = startTimeController.text;
     final endTime = endTimeController.text;
 
-    if (selectedDay == null || startTime.isEmpty || endTime.isEmpty || teacherId == null) {
+    if (selectedDay == null ||
+        startTime.isEmpty ||
+        endTime.isEmpty ||
+        teacherId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Por favor, preencha o formulário.'),
@@ -137,7 +141,8 @@ class _ClassFormState extends State<ClassForm> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Home(initialIndex: 1), // Definir a aba de "Aulas"
+                      builder: (context) => const Home(
+                          initialIndex: 1), // Definir a aba de "Aulas"
                     ),
                   );
                 },
@@ -152,7 +157,8 @@ class _ClassFormState extends State<ClassForm> {
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: Listenable.merge([store.isLoading, store.isSuccess, store.error, userStore.isLoading]),
+      animation: Listenable.merge(
+          [store.isLoading, store.isSuccess, store.error, userStore.isLoading]),
       builder: (context, child) {
         return Scaffold(
           appBar: AppBar(
@@ -164,7 +170,7 @@ class _ClassFormState extends State<ClassForm> {
               children: [
                 DropdownButtonFormField<int>(
                   value: selectedDay,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Dia da Aula',
                     prefixIcon: Icon(Icons.calendar_today),
                     border: OutlineInputBorder(),
@@ -199,22 +205,25 @@ class _ClassFormState extends State<ClassForm> {
                   label: "Horário de Término",
                 ),
                 const SizedBox(height: 16),
-                Text(
+                const Text(
                   "Selecione os Alunos",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 Expanded(
                   child: userStore.isLoading.value
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : ListView(
                           children: userStore.state.value.map((student) {
                             return CheckboxListTile(
-                              title: Text(student.user.name ?? 'Nome não disponível'), // Valor padrão se o nome for nulo
-                              value: selectedStudentIds.contains(student.id ?? -1), // Valor padrão se o ID for nulo
+                              title: Text(student.user.name ??
+                                  'Nome não disponível'), // Valor padrão se o nome for nulo
+                              value: selectedStudentIds.contains(student.id ??
+                                  -1), // Valor padrão se o ID for nulo
                               onChanged: (bool? value) {
                                 setState(() {
-                                  final studentId = student.id ?? -1; // Valor padrão se o ID for nulo
+                                  final studentId = student.id ??
+                                      -1; // Valor padrão se o ID for nulo
                                   if (value == true) {
                                     selectedStudentIds.add(studentId);
                                   } else {
