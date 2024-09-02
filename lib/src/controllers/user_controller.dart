@@ -29,8 +29,6 @@ class UserController implements IUserController {
       final List<StudentModel> users = [];
       final body = jsonDecode(response.body);
 
-      print(body);
-
       body.map((item) {
         final StudentModel user = StudentModel.fromJson(item);
         users.add(user);
@@ -58,7 +56,6 @@ class UserController implements IUserController {
   @override
   Future<void> createStudent(UserModel user) async {
     final Map<String, dynamic> data = user.toJson();
-    print(data);
     const registerUrl = "/api/register";
     final response = await client.post(url: registerUrl, body: data);
 
@@ -72,8 +69,6 @@ class UserController implements IUserController {
   Future<String> login(UserModel user) async {
     final Map<String, dynamic> data = user.toJson();
     const loginUrl = '/api/login';
-
-    print(data);
 
     final response = await client.post(url: loginUrl, body: data);
 

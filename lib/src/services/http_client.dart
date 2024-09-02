@@ -61,7 +61,6 @@ class HttpClient implements IHttpClient {
   @override
   Future delete({required String url, required int id}) async {
     final newUrl = '$url/$id';
-    print(baseUrl + newUrl);
     return await client.delete(
       Uri.parse(baseUrl + newUrl),
       headers: {
