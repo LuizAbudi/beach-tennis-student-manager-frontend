@@ -18,12 +18,12 @@ class ClassStore {
 
   ClassStore({required this.controller});
 
-  Future<void> getClasses() async {
+  Future<void> getClasses(int teacherId) async {
     isLoading.value = true;
     error.value = '';
 
     try {
-      final result = await controller.getClasses();
+      final result = await controller.getClasses(teacherId);
 
       state.value = result;
     } catch (e) {

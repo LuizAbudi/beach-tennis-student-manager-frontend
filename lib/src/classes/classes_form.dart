@@ -47,7 +47,7 @@ class _ClassFormState extends State<ClassForm> {
     endTimeController = TextEditingController();
 
     _getLoggedUserId(); // Obtém o ID do usuário logado
-    userStore.getStudents(); // Carrega os alunos disponíveis
+    userStore.getStudents(teacherId!); // Carrega os alunos disponíveis
   }
 
   Future<void> _getLoggedUserId() async {

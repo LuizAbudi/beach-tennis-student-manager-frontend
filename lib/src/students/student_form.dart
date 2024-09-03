@@ -52,6 +52,7 @@ class _UserFormState extends State<UserForm> {
         id: decodedToken['id'],
         name: decodedToken['name'],
         email: decodedToken['email'],
+        teacherId: decodedToken['teacher_id'],
       );
     }
 
@@ -96,14 +97,14 @@ class _UserFormState extends State<UserForm> {
             name: name,
             userType: "student",
             password: "1234abc",
-            teacherId: loggedUserModel?.id,
+            teacherId: loggedUserModel?.teacherId,
           );
 
     if (widget.id != null) {
       await store.updateUser(newStudent);
     } else {
       await store.createStudent(newStudent);
-      if (store.isSuccess.value) {
+      if (store.isSuccess.value && mounted) {
         _showSuccessModal(context);
       }
     }

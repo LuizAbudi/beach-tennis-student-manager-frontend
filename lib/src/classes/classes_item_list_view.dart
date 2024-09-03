@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:mobile/src/classes/classes_detail_view.dart';
 import 'package:mobile/src/classes/classes_form.dart';
 import 'package:mobile/src/controllers/classes_controller.dart';
+import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/classes_stores.dart';
-import 'package:mobile/src/widgets/custom_button.dart'; // Import do CustomButton
+import 'package:mobile/src/widgets/custom_button.dart';
+import 'package:mobile/src/widgets/empty_state.dart'; // Import do CustomButton
 
 class ClassesListView extends StatefulWidget {
   const ClassesListView({super.key});
@@ -20,14 +24,30 @@ class _ClassesListViewState extends State<ClassesListView> {
     ),
   );
 
+  UserModel? loggedUserModel;
+  final token = localStorage.getItem('token');
+
   @override
   void initState() {
     super.initState();
+
+    if (token != null) {
+      final Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
+
+      loggedUserModel = UserModel(
+        id: decodedToken['id'],
+        name: decodedToken['name'],
+        email: decodedToken['email'],
+        userType: decodedToken['userType'],
+        teacherId: decodedToken['teacherId'],
+      );
+    }
+
     _loadClasses();
   }
 
   Future<void> _loadClasses() async {
-    await store.getClasses();
+    await store.getClasses(loggedUserModel!.teacherId!);
   }
 
   String _dayOfWeek(int day) {
@@ -73,8 +93,8 @@ class _ClassesListViewState extends State<ClassesListView> {
                   ),
                 );
               } else if (store.state.value.isEmpty) {
-                return const Center(
-                  child: Text('Nenhuma aula disponível.'),
+                return const EmptyStateWidget(
+                  message: "Nenhuma aula cadastrada...",
                 );
               } else {
                 return Padding(

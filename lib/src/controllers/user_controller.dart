@@ -5,7 +5,7 @@ import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/services/http_client.dart';
 
 abstract class IUserController {
-  Future<List<StudentModel>> getStudents();
+  Future<List<StudentModel>> getStudents(int teacherId);
   Future<void> createUser(UserModel user);
   Future<void> createStudent(UserModel user);
   Future<String> login(UserModel user);
@@ -22,8 +22,9 @@ class UserController implements IUserController {
   UserController({required this.client});
 
   @override
-  Future<List<StudentModel>> getStudents() async {
-    final response = await client.get(url: "/api/students/all");
+  Future<List<StudentModel>> getStudents(int teacherId) async {
+    final response =
+        await client.get(url: '/api/students/my-students/$teacherId');
 
     if (response.statusCode == 200) {
       final List<StudentModel> users = [];
@@ -80,7 +81,7 @@ class UserController implements IUserController {
       return token;
     } else {
       final responseData = jsonDecode(response.body);
-      throw responseData['error']['message'];
+      throw responseData['message'];
     }
   }
 
@@ -92,7 +93,7 @@ class UserController implements IUserController {
 
     if (response.statusCode != 200) {
       final responseData = jsonDecode(response.body);
-      throw responseData['error']['message'];
+      throw responseData['message'];
     }
   }
 

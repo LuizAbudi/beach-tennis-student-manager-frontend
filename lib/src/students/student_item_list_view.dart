@@ -8,6 +8,7 @@ import 'package:mobile/src/stores/user_stores.dart';
 import 'package:mobile/src/students/student_details_view.dart';
 import 'package:mobile/src/students/student_form.dart';
 import 'package:mobile/src/widgets/custom_button.dart';
+import 'package:mobile/src/widgets/empty_state.dart';
 import 'package:mobile/src/widgets/student_card.dart';
 
 class UserItemListView extends StatefulWidget {
@@ -42,10 +43,11 @@ class _UserItemListViewState extends State<UserItemListView> {
         name: decodedToken['name'],
         email: decodedToken['email'],
         userType: decodedToken['userType'],
+        teacherId: decodedToken['teacherId'],
       );
     }
 
-    store.getStudents();
+    store.getStudents(loggedUserModel!.teacherId!);
   }
 
   @override
@@ -58,6 +60,12 @@ class _UserItemListViewState extends State<UserItemListView> {
             animation:
                 Listenable.merge([store.isLoading, store.error, store.state]),
             builder: (context, child) {
+              if (store.state.value.isEmpty) {
+                return const EmptyStateWidget(
+                  message: "Nenhum aluno cadastrado...",
+                );
+              }
+
               if (store.isLoading.value) {
                 return const Center(
                   child: CircularProgressIndicator(

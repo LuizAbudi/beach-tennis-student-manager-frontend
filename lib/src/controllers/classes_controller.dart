@@ -3,7 +3,7 @@ import 'package:mobile/src/models/classes_model.dart';
 import 'package:mobile/src/services/http_client.dart';
 
 abstract class IClassController {
-  Future<List<ClassModel>> getClasses();
+  Future<List<ClassModel>> getClasses(int teacherId);
   Future<void> createClass(ClassModel classModel);
   Future<ClassModel?> getClassById(int id);
 }
@@ -15,8 +15,8 @@ class ClassController implements IClassController {
   ClassController({required this.client});
 
   @override
-  Future<List<ClassModel>> getClasses() async {
-    final response = await client.get(url: baseUrl);
+  Future<List<ClassModel>> getClasses(int teacherId) async {
+    final response = await client.get(url: '$baseUrl/$teacherId');
 
     if (response.statusCode == 200) {
       final List<ClassModel> classes = [];

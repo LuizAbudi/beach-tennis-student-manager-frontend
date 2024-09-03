@@ -17,12 +17,12 @@ class UserStore {
 
   UserStore({required this.controller});
 
-  Future<void> getStudents() async {
+  Future<void> getStudents(int teacherId) async {
     isLoading.value = true;
     error.value = '';
 
     try {
-      final result = await controller.getStudents();
+      final result = await controller.getStudents(teacherId);
       state.value = result;
     } catch (e) {
       if (kDebugMode) {
@@ -91,7 +91,7 @@ class UserStore {
 
     try {
       await controller.updateUser(user);
-      await getStudents();
+      // await getStudents();
     } catch (e) {
       if (kDebugMode) {
         print('error: $e');
