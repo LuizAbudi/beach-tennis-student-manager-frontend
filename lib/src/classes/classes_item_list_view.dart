@@ -152,24 +152,25 @@ class _ClassesListViewState extends State<ClassesListView> {
               }
             },
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: CustomButton(
-                text: "Cadastrar Aula",
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          const ClassForm(), // Tela do formulário de classe
-                    ),
-                  );
-                },
+          if (loggedUserModel?.userType != 'student') // Verifica se o userType não é 'student'
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: CustomButton(
+                  text: "Cadastrar Aula",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const ClassForm(), // Tela do formulário de classe
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
