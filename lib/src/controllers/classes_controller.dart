@@ -16,7 +16,7 @@ class ClassController implements IClassController {
 
   @override
   Future<List<ClassModel>> getClasses(int teacherId) async {
-    final response = await client.get(url: '$baseUrl/$teacherId');
+    final response = await client.get(url: '$baseUrl/teacher/$teacherId');
 
     if (response.statusCode == 200) {
       final List<ClassModel> classes = [];

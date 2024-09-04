@@ -52,7 +52,7 @@ class _UserFormState extends State<UserForm> {
         id: decodedToken['id'],
         name: decodedToken['name'],
         email: decodedToken['email'],
-        teacherId: decodedToken['teacher_id'],
+        teacherId: decodedToken['teacherId'],
       );
     }
 

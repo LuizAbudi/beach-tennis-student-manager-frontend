@@ -16,6 +16,7 @@ class ClassModel {
   int? teacherId;
   List<int>? studentIds;
   UserModel? teacher;
+  List<UserModel>? students;
 
   ClassModel({
     this.id,
@@ -25,6 +26,7 @@ class ClassModel {
     this.teacherId,
     this.studentIds,
     this.teacher,
+    this.students,
   });
 
   factory ClassModel.fromJson(Map<String, dynamic> json) => ClassModel(
@@ -39,6 +41,10 @@ class ClassModel {
         studentIds: json["studentIds"] == null
             ? null
             : List<int>.from(json["studentIds"].map((x) => x)),
+        students: json["students"] == null
+            ? null
+            : List<UserModel>.from(
+                json["students"].map((x) => UserModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() {
@@ -50,6 +56,9 @@ class ClassModel {
       "studentIds": studentIds == null
           ? []
           : List<dynamic>.from(studentIds!.map((x) => x)),
+      "students": students == null
+          ? []
+          : List<dynamic>.from(students!.map((x) => x.toJson())),
     };
 
     return data;

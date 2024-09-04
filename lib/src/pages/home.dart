@@ -24,6 +24,7 @@ class _HomeState extends State<Home> {
 
   late ClassStore classStore;
   late List<Widget> tabs;
+  late List<BottomNavigationBarItem> bottomNavItems;
 
   UserModel? loggedUserModel;
   final token = localStorage.getItem('token');
@@ -40,12 +41,6 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    tabs = [
-      const UserItemListView(),
-      const ClassesListView(),
-      const MyProfileView(),
-    ];
-
     if (token != null) {
       final Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
 
@@ -53,7 +48,48 @@ class _HomeState extends State<Home> {
         id: decodedToken['id'],
         name: decodedToken['name'],
         email: decodedToken['email'],
+        userType: decodedToken['userType']
       );
+
+      // Condicional para ocultar a aba "Alunos" se for um estudante
+      if (decodedToken['userType'] == 'student') {
+        tabs = [
+          const ClassesListView(),
+          const MyProfileView(),
+        ];
+
+        bottomNavItems = [
+          BottomNavigationBarItem(
+            icon: _buildIcon(0),
+            label: "Aulas",
+          ),
+          BottomNavigationBarItem(
+            icon: _buildIcon(1),
+            label: "Meu Perfil",
+          ),
+        ];
+      } else {
+        tabs = [
+          const UserItemListView(),
+          const ClassesListView(),
+          const MyProfileView(),
+        ];
+
+        bottomNavItems = [
+          BottomNavigationBarItem(
+            icon: _buildIcon(0),
+            label: "Alunos",
+          ),
+          BottomNavigationBarItem(
+            icon: _buildIcon(1),
+            label: "Aulas",
+          ),
+          BottomNavigationBarItem(
+            icon: _buildIcon(2),
+            label: "Meu Perfil",
+          ),
+        ];
+      }
     }
   }
 
@@ -119,12 +155,7 @@ class _HomeState extends State<Home> {
         selectedItemColor: const Color.fromRGBO(255, 98, 62, 1),
         unselectedFontSize: 12,
         backgroundColor: Colors.white,
-        items: List.generate(3, (index) {
-          return BottomNavigationBarItem(
-            icon: _buildIcon(index),
-            label: _getLabel(index),
-          );
-        }),
+        items: bottomNavItems,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
@@ -161,26 +192,24 @@ class _HomeState extends State<Home> {
   }
 
   IconData _getIcon(int index) {
-    switch (index) {
-      case 0:
-        return Icons.people;
-      case 1:
-        return Icons.sports_outlined;
-      case 2:
-      default:
-        return Icons.person;
-    }
-  }
-
-  String _getLabel(int index) {
-    switch (index) {
-      case 0:
-        return "Alunos";
-      case 1:
-        return "Aulas";
-      case 2:
-      default:
-        return "Meu Perfil";
+    if (loggedUserModel!.userType == 'student') {
+      switch (index) {
+        case 0:
+          return Icons.sports_outlined;
+        case 1:
+        default:
+          return Icons.person;
+      }
+    } else {
+      switch (index) {
+        case 0:
+          return Icons.people;
+        case 1:
+          return Icons.sports_outlined;
+        case 2:
+        default:
+          return Icons.person;
+      }
     }
   }
 }

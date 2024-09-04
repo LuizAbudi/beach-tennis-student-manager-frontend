@@ -74,7 +74,7 @@ class _ClassesDetailsViewState extends State<ClassesDetailsView> {
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16.0),
                   Text(
@@ -93,9 +93,30 @@ class _ClassesDetailsViewState extends State<ClassesDetailsView> {
                   ),
                   const SizedBox(height: 8.0),
                   Text(
-                    "Professor: ${classModel!.teacher!.name ?? 'N/A'}",
+                    "Professor: ${classModel!.teacher?.name ?? 'N/A'}",
                     style: const TextStyle(
                       fontSize: 16.0,
+                    ),
+                  ),
+                  const SizedBox(height: 32.0),
+                  Text(
+                    "Alunos:",
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: classModel!.students?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final student = classModel!.students![index];
+                        return ListTile(
+                          title: Text(student.name ?? 'N/A'),
+                          subtitle: Text('Nível: ${student.level ?? 'N/A'}'),
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(height: 32.0),

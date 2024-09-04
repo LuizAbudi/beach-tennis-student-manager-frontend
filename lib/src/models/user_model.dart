@@ -31,7 +31,7 @@ class UserModel {
         email: json["email"] ?? "",
         password: json["password"] ?? "",
         userType: json["userType"] ?? "",
-        status: json["status"] ?? "",
+        status: json["status"] is bool ? json["status"] : (json["status"] == "true"),
         level: json["level"] ?? "",
         teacherId: json["teacherId"] ?? 0,
       );
