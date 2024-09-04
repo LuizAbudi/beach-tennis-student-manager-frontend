@@ -56,9 +56,6 @@ class ClassModel {
       "studentIds": studentIds == null
           ? []
           : List<dynamic>.from(studentIds!.map((x) => x)),
-      "students": students == null
-          ? []
-          : List<dynamic>.from(students!.map((x) => x.toJson())),
     };
 
     return data;

@@ -54,6 +54,23 @@ class ClassStore {
 
     isLoading.value = false;
   }
+  Future<void> getClassesByStudentId(int studentId) async {
+    isLoading.value = true;
+    error.value = '';
+
+    try {
+      final result = await controller.getClassesByStudentId(studentId);
+
+      state.value = result;
+    } catch (e) {
+      if (kDebugMode) {
+        print('error: $e');
+      }
+      error.value = e.toString();
+    }
+
+    isLoading.value = false;
+  }
 
   Future<void> getClassById(int id) async {
     isLoading.value = true;

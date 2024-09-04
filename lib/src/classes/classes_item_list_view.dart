@@ -25,6 +25,7 @@ class _ClassesListViewState extends State<ClassesListView> {
   );
 
   UserModel? loggedUserModel;
+  int? studentId;
   final token = localStorage.getItem('token');
 
   @override
@@ -41,13 +42,19 @@ class _ClassesListViewState extends State<ClassesListView> {
         userType: decodedToken['userType'],
         teacherId: decodedToken['teacherId'],
       );
+
+      studentId = decodedToken['studentId'];
     }
 
     _loadClasses();
   }
 
   Future<void> _loadClasses() async {
-    await store.getClasses(loggedUserModel!.teacherId!);
+    if (loggedUserModel?.userType == 'student' && studentId != null) {
+      await store.getClassesByStudentId(studentId!);
+    } else {
+      await store.getClasses(loggedUserModel!.teacherId!);
+    }
   }
 
   String _dayOfWeek(int day) {
