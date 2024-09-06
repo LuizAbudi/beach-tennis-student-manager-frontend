@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/src/controllers/payment_controller.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/models/student_model.dart';
+import 'package:mobile/src/payment/payment_form.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/payment_stores.dart';
 import 'package:mobile/src/stores/user_stores.dart';
@@ -120,7 +121,16 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
                 const SizedBox(width: 16.0),
                 CustomButton(
                   text: "Pagamento",
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PaymentForm(
+                          studentId: widget.student.id,
+                        ),
+                      ),
+                    );
+                  },
                   icon: Icons.payment_outlined,
                   height: 40,
                   textSize: 14,
