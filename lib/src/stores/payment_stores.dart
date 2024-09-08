@@ -14,6 +14,15 @@ class PaymentStore {
 
   PaymentStore({required this.controller});
 
+  Future<void>CreatePayment(int id) async {
+    isLoading.value = true;
+    error.value = "";
+
+    try {
+      final result = await controller.createPayment;
+    }
+  }
+
   Future<void> getStudentPayments(int id) async {
     isLoading.value = true;
     error.value = '';

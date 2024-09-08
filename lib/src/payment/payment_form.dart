@@ -47,7 +47,7 @@ class _PaymentFormState extends State<PaymentForm> {
 
     if (loggedUser != null) {
       final Map<String, dynamic> decodedToken = JwtDecoder.decode(loggedUser!);
-
+      print(decodedToken);
       loggedUserModel = UserModel(
         id: decodedToken['id'],
         name: decodedToken['name'],

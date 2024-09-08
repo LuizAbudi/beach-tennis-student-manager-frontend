@@ -5,6 +5,7 @@ import 'package:mobile/src/services/http_client.dart';
 
 abstract class IPaymentController {
   Future<List<PaymentModel>> getStudentPayments(int id);
+  Future<void> createPayment(int studentId);
 }
 
 class PaymentController implements IPaymentController {
@@ -13,6 +14,15 @@ class PaymentController implements IPaymentController {
 
   PaymentController({required this.client}) {
     baseUrl = "/api/payments";
+  }
+  
+  @override
+  Future<void> createPayment(int studentId) async{
+    final response = await client.post(url: "/api/payments/$studentId/create-payment", body: null);
+
+    if (response.statusCode == 201){
+
+    }
   }
 
   @override
