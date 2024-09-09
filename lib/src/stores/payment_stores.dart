@@ -3,7 +3,7 @@ import 'package:mobile/src/controllers/payment_controller.dart';
 import 'package:mobile/src/models/payment_model.dart';
 
 class PaymentStore {
-  final IPaymentController controller;
+  final PaymentController controller;
 
   final ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
@@ -14,12 +14,15 @@ class PaymentStore {
 
   PaymentStore({required this.controller});
 
-  Future<void>CreatePayment(int id) async {
+  Future<void> CreatePayment(int id, String date, String status) async {
     isLoading.value = true;
     error.value = "";
-
     try {
-      final result = await controller.createPayment;
+      final result = await controller.createPayment(id, date, status);
+    } catch (e) {
+      if (kDebugMode) {
+        print('error: $e');
+      }
     }
   }
 

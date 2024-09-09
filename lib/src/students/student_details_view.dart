@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/src/controllers/payment_controller.dart';
 import 'package:mobile/src/controllers/user_controller.dart';
 import 'package:mobile/src/models/student_model.dart';
@@ -29,6 +30,28 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
       client: HttpClient(),
     ),
   );
+  //
+  // void _handleCreatePayment() async {
+  //   await paymentStore.CreatePayment(widget.student.id!);
+  //   if (mounted && paymentStore.error.value.isNotEmpty) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(paymentStore.error.value),
+  //         backgroundColor: Colors.red,
+  //       ),
+  //     );
+  //   }
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(
+  //       content: Text("Pagamento Criado com sucesso"),
+  //       backgroundColor: Colors.green,
+  //     ),
+  //   );
+  //   setState(() {
+  //     paymentStore.getStudentPayments(widget.student.id!);
+  //   });
+  // }
+  // _handleCreatePayment();
 
   void _handleDeleteStudent() async {
     await store.deleteUser(widget.student.id!);
@@ -45,6 +68,19 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
     if (mounted && store.error.value.isEmpty) {
       Navigator.pop(context);
     }
+  }
+
+  String returnStatusTranslated(String status) {
+    if (status == "paid") {
+      return "Pago";
+    }
+    if (status == "pending") {
+      return "Pendente";
+    }
+    if (status == "expired") {
+      return "Expirado";
+    }
+    return "Não disponível";
   }
 
   @override
@@ -126,7 +162,7 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => PaymentForm(
-                          studentId: widget.student.id,
+                          studentId: widget.student.id!,
                         ),
                       ),
                     );
@@ -221,11 +257,11 @@ class _UserItemDetailsViewState extends State<UserItemDetailsView> {
                       ),
                     ),
                     title: Text(
-                      "Data: ${payment.paymentDate}",
+                      "Data: ${DateFormat('dd/MM/yyyy').format(DateTime.parse(payment.paymentDate!))}",
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                      "Status: ${payment.paymentStatus == "paid" ? "Pago" : "Pendente"}",
+                      "Status: ${returnStatusTranslated(payment.paymentStatus!)}",
                     ),
                     trailing: Icon(
                       payment.paymentStatus == "paid"

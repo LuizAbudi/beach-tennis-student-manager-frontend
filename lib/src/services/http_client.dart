@@ -34,6 +34,7 @@ class HttpClient implements IHttpClient {
 
   @override
   Future post({required String url, required dynamic body}) async {
+    print("to no post");
     return await client.post(
       Uri.parse(baseUrl + url),
       body: jsonEncode(body),

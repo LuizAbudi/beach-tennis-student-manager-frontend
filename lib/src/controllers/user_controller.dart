@@ -77,7 +77,6 @@ class UserController implements IUserController {
       final responseData = jsonDecode(response.body);
 
       final token = responseData['access_token'];
-
       return token;
     } else {
       final responseData = jsonDecode(response.body);
