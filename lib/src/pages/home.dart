@@ -20,7 +20,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _currentIndex = 0;
+  late ValueNotifier<int> _currentIndexNotifier;
 
   late ClassStore classStore;
   late List<Widget> tabs;
@@ -33,7 +33,7 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
 
-    _currentIndex = widget.initialIndex;
+    _currentIndexNotifier = ValueNotifier<int>(widget.initialIndex);
 
     classStore = ClassStore(
       controller: ClassController(
@@ -45,13 +45,11 @@ class _HomeState extends State<Home> {
       final Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
 
       loggedUserModel = UserModel(
-        id: decodedToken['id'],
-        name: decodedToken['name'],
-        email: decodedToken['email'],
-        userType: decodedToken['userType']
-      );
+          id: decodedToken['id'],
+          name: decodedToken['name'],
+          email: decodedToken['email'],
+          userType: decodedToken['userType']);
 
-      // Condicional para ocultar a aba "Alunos" se for um estudante
       if (decodedToken['userType'] == 'student') {
         tabs = [
           const ClassesListView(),
@@ -147,48 +145,67 @@ class _HomeState extends State<Home> {
           )
         ],
       ),
-      body: tabs[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedFontSize: 13,
-        selectedItemColor: const Color.fromRGBO(255, 98, 62, 1),
-        unselectedFontSize: 12,
-        backgroundColor: Colors.white,
-        items: bottomNavItems,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+      body: ValueListenableBuilder<int>(
+        valueListenable: _currentIndexNotifier,
+        builder: (context, currentIndex, _) {
+          return tabs[currentIndex];
+        },
+      ),
+      bottomNavigationBar: ValueListenableBuilder<int>(
+        valueListenable: _currentIndexNotifier,
+        builder: (context, currentIndex, _) {
+          return BottomNavigationBar(
+            currentIndex: currentIndex,
+            type: BottomNavigationBarType.fixed,
+            selectedFontSize: 13,
+            selectedItemColor: const Color.fromRGBO(255, 98, 62, 1),
+            unselectedFontSize: 12,
+            backgroundColor: Colors.white,
+            items: bottomNavItems,
+            onTap: (index) {
+              _currentIndexNotifier.value = index;
+            },
+          );
         },
       ),
     );
   }
 
   Widget _buildIcon(int index) {
-    final bool isSelected = _currentIndex == index;
+    return ValueListenableBuilder<int>(
+      valueListenable: _currentIndexNotifier,
+      builder: (context, currentIndex, _) {
+        final bool isSelected = currentIndex == index;
 
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        if (isSelected)
-          Container(
-            width: 60,
-            height: 32,
-            decoration: const BoxDecoration(
-              color: Color.fromRGBO(255, 98, 62, 0.2),
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.all(Radius.circular(16)),
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            if (isSelected)
+              Container(
+                width: 60,
+                height: 32,
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(255, 98, 62, 0.2),
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                ),
+              ),
+            Icon(
+              _getIcon(index),
+              color: isSelected
+                  ? const Color.fromRGBO(255, 98, 62, 1)
+                  : const Color.fromRGBO(22, 24, 35, 0.6),
             ),
-          ),
-        Icon(
-          _getIcon(index),
-          color: isSelected
-              ? const Color.fromRGBO(255, 98, 62, 1)
-              : const Color.fromRGBO(22, 24, 35, 0.6),
-        ),
-      ],
+          ],
+        );
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    _currentIndexNotifier.dispose();
+    super.dispose();
   }
 
   IconData _getIcon(int index) {

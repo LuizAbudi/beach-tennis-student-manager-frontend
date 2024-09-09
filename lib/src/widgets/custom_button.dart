@@ -9,6 +9,7 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final IconData? icon;
   final Color? iconColor;
+  final double? iconSize;
   final VoidCallback? onPressed;
   final bool isLoading;
   final bool? withShadow;
@@ -21,6 +22,7 @@ class CustomButton extends StatelessWidget {
     this.height,
     this.icon,
     this.iconColor,
+    this.iconSize,
     this.onPressed,
     this.isLoading = false,
     this.textSize,
@@ -80,7 +82,11 @@ class CustomButton extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (icon != null) ...[
-                      Icon(icon, color: iconColor ?? Colors.white),
+                      Icon(
+                        icon,
+                        color: iconColor ?? Colors.white,
+                        size: iconSize ?? 16,
+                      ),
                       const SizedBox(width: 8),
                     ],
                     Text(

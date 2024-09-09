@@ -5,6 +5,7 @@ import 'package:mobile/src/models/user_model.dart';
 import 'package:mobile/src/services/http_client.dart';
 import 'package:mobile/src/stores/payment_stores.dart';
 import 'package:mobile/src/stores/user_stores.dart';
+import 'package:mobile/src/widgets/custom_button.dart';
 
 class MyProfileView extends StatefulWidget {
   const MyProfileView({super.key});
@@ -95,6 +96,17 @@ class _MyProfileViewState extends State<MyProfileView> {
                       fontSize: 14.0,
                       color: Colors.grey,
                     ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  CustomButton(
+                    text: "Editar perfil",
+                    color: Colors.grey,
+                    width: 180,
+                    icon: Icons.edit,
+                    iconSize: 16,
+                    height: 30,
+                    textSize: 14,
+                    onPressed: () {},
                   ),
                   if (myUser!.userType == "student") ...[
                     const SizedBox(height: 60.0),
