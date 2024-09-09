@@ -1,5 +1,13 @@
 # Beach Tennis Student Management Frontend
 
+Disciplina: Desenvolvimento Móvel - OPT120
+
+Desenvolvido por:
+- Luiz Gustavo Pasini Abudi
+- Alyson Gonçalves Jorge
+- Rafael Dalacqua dos Santos
+- Iago Ortega
+
 ## Descrição
 
 Este sistema foi desenvolvido para facilitar o gerenciamento de atividades relacionadas ao ensino de beach tennis. Possui as seguintes funcionalidades:
